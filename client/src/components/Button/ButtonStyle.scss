@@ -13,6 +13,7 @@
   font-weight: 700;
   font-style: normal;
 
+  transition: all 0.05s;
   cursor: pointer;
   &:active {
     box-shadow: 0 2px 0 0 #5a189a;

@@ -1,21 +1,30 @@
-import "./JoinFormStyle.scss";
+import "./FormStyle.scss";
 
 import { useForm, SubmitHandler } from "react-hook-form";
 import { Button } from "../Button/Button";
 import { RowLayout } from "../layouts/RowLayout";
+import { useNavigate } from "react-router-dom";
 
 interface FormInputs {
   nickname: string;
   room: string;
 }
 
-export const JoinForm = () => {
+type JoinFormProps = {
+  onCancel: () => void;
+};
+
+export const JoinForm = ({ onCancel }: JoinFormProps) => {
+  const navigator = useNavigate();
   const { register, handleSubmit } = useForm<FormInputs>();
-  const onJoin: SubmitHandler<FormInputs> = (data) => console.log("join", data);
-  const onCreate: SubmitHandler<FormInputs> = (data) =>
-    console.log("create", data);
+
+  const onJoin: SubmitHandler<FormInputs> = (data) => {
+    console.log("join", data);
+    navigator("/room");
+  };
+
   return (
-    <form className="form">
+    <form className="form" onSubmit={handleSubmit(onJoin)} onReset={onCancel}>
       <input
         className="form-input"
         style={{ width: "100%" }}
@@ -25,7 +34,7 @@ export const JoinForm = () => {
         {...register("nickname")}
       />
       <RowLayout>
-        <Button style={{ width: "50%" }} onClick={handleSubmit(onJoin)}>
+        <Button style={{ width: "50%" }} type="submit">
           Join
         </Button>
         <input
@@ -37,8 +46,8 @@ export const JoinForm = () => {
           {...register("room", { required: true, maxLength: 5 })}
         />
       </RowLayout>
-      <Button style={{ width: "100%" }} onClick={handleSubmit(onCreate)}>
-        Create Room
+      <Button style={{ width: "100%" }} type="reset">
+        Go Back
       </Button>
     </form>
   );
