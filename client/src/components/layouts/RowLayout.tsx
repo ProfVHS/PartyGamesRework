@@ -14,6 +14,7 @@ export const RowLayout = ({ children, gap }: RowLayoutProps) => {
         alignItems: "center",
         flexDirection: "row",
         gap: `${gap ?? 8}px`,
+        width: "100%",
       }}>
       {children}
     </div>
