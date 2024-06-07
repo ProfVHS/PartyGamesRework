@@ -1,7 +1,7 @@
 import './FormStyle.scss';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button } from '../Button/Button';
+import { Button } from '../UI/Button/Button';
 import { RowLayout } from '../layouts/RowLayout';
 import { useNavigate } from 'react-router-dom';
 

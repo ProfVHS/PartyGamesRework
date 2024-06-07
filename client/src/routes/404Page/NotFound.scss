@@ -1,0 +1,44 @@
+.not-found {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  width: 100vw;
+  height: 100vh;
+  user-select: none;
+
+  &__content {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    gap: 16px;
+    box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.2);
+  }
+  &__title {
+    position: absolute;
+    top: -35%;
+    font-family: 'Spicy Rice', serif;
+    font-weight: 400;
+    font-style: normal;
+    font-size: 64px;
+    color: #fff;
+
+    text-shadow: 0 5px 0 rgba(0, 0, 0, 0.2);
+    -webkit-text-stroke: #3c096c 3px;
+  }
+  &__subtitle {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+  }
+  &__description {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+  }
+}
