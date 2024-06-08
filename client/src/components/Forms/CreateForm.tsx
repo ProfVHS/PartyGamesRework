@@ -1,8 +1,10 @@
-import "./FormStyle.scss";
+import './FormStyle.scss';
 
-import { useForm, SubmitHandler } from "react-hook-form";
-import { Button } from "../Button/Button";
-import { useNavigate } from "react-router-dom";
+import { useForm, SubmitHandler } from 'react-hook-form';
+import { Button } from '../UI/Button/Button';
+import { useNavigate } from 'react-router-dom';
+import { useAnimate } from 'framer-motion';
+import { useEffect } from 'react';
 
 interface FormInputs {
   nickname: string;
@@ -14,28 +16,36 @@ type CreateFormProps = {
 };
 
 export const CreateForm = ({ onCancel }: CreateFormProps) => {
+  const [scope, animate] = useAnimate();
   const navigator = useNavigate();
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    console.log("join", data);
-    navigator("/room");
+    console.log('join', data);
+    navigator('/room');
   };
 
+  useEffect(() => {}, []);
+
   return (
-    <form className="form" onSubmit={handleSubmit(onJoin)} onReset={onCancel}>
+    <form
+      className="form"
+      onSubmit={handleSubmit(onJoin)}
+      onReset={onCancel}
+      ref={scope}
+    >
       <input
         className="form-input"
-        style={{ width: "100%" }}
+        style={{ width: '100%' }}
         type="text"
         id="name"
         placeholder="Nickname"
-        {...register("nickname")}
+        {...register('nickname')}
       />
-      <Button style={{ width: "100%" }} type="submit">
+      <Button style={{ width: '100%' }} type="submit">
         Create
       </Button>
-      <Button style={{ width: "100%" }} type="reset">
+      <Button style={{ width: '100%' }} type="reset">
         Go Back
       </Button>
     </form>
