@@ -1,0 +1,35 @@
+@import '../../../sassStyles/variables.scss';
+.number-picker {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  justify-content: space-evenly;
+  width: 100%;
+  user-select: none;
+
+  font-size: 0.8em;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+
+  background-color: $primaryColor;
+  box-shadow: 0 4px 0 0 #5a189a;
+  border-radius: 4px;
+
+  &__button {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+
+    transition: all 0.05s;
+    height: 100%;
+    &:active {
+      background-color: $darkerPrimaryColor;
+    }
+  }
+  &__number {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-left: 2px solid rgba(255, 255, 255, 0.2);
+    border-right: 2px solid rgba(255, 255, 255, 0.2);
+  }
+}

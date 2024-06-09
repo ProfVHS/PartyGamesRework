@@ -2,6 +2,7 @@ import './LobbyStyle.scss';
 import { Button } from '../../UI/Button/Button';
 import { RowLayout } from '../../layouts/RowLayout';
 import { useState } from 'react';
+import { LobbySettings } from '../lobbysettings/LobbySettings';
 
 export const Lobby = () => {
   const [ready, setReady] = useState(false);
@@ -13,15 +14,18 @@ export const Lobby = () => {
     );
   };
   return (
-    <div className="lobby">
-      <span className="lobby__title">Room Code: 12345</span>
-      <RowLayout>
-        <span className="lobby__players">{playersReady}</span>
-        <span className="lobby__text">Players ready</span>
-      </RowLayout>
-      <Button style={{ width: '75%' }} onClick={toggleReady}>
-        {ready ? 'Unready' : 'Ready'}
-      </Button>
-    </div>
+    <>
+      <div className="lobby">
+        <span className="lobby__title">Room Code: 12345</span>
+        <RowLayout>
+          <span className="lobby__players">{playersReady}</span>
+          <span className="lobby__text">Players ready</span>
+        </RowLayout>
+        <Button style={{ width: '75%' }} onClick={toggleReady}>
+          {ready ? 'Unready' : 'Ready'}
+        </Button>
+        <LobbySettings />
+      </div>
+    </>
   );
 };
