@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { HomePage } from './Home/HomePage';
 import { NotFound } from './404Page/NotFound';
+import { RoomPage } from './Room/RoomPage';
 
 const router = createBrowserRouter([
   {
@@ -9,7 +10,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/room',
-    element: <div>Room</div>,
+    element: <RoomPage />,
   },
   {
     path: '*',
