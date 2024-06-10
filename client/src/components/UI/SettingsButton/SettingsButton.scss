@@ -1,0 +1,21 @@
+@import '../../../sassStyles/variables.scss';
+.settings-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease;
+  &:active {
+    transform: scale(0.9);
+  }
+  & svg {
+    width: 25px;
+    height: 25px;
+  }
+  & path {
+    fill: rgba($primaryColor, 0.6);
+  }
+}

@@ -37,4 +37,9 @@
     font-family: 'Spicy Rice', cursive;
     color: $secondaryColor;
   }
+  &__settingsbutton {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+  }
 }

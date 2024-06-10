@@ -4,11 +4,17 @@ import './NumberPickerStyle.scss';
 type NumberPickerProps = {
   min?: number;
   max?: number;
+  defaultNumber?: number;
   onchange?: (number: number) => void;
 };
 
-export const NumberPicker = ({ min, max, onchange }: NumberPickerProps) => {
-  const [number, setNumber] = useState(min || 1);
+export const NumberPicker = ({
+  min,
+  max,
+  defaultNumber,
+  onchange,
+}: NumberPickerProps) => {
+  const [number, setNumber] = useState(defaultNumber || min || 0);
   const increment = () => {
     if (max && number >= max) return;
     setNumber((prevNumber) => prevNumber + 1);
@@ -17,7 +23,7 @@ export const NumberPicker = ({ min, max, onchange }: NumberPickerProps) => {
   const decrement = () => {
     if (min && number <= min) return;
     setNumber((prevNumber) => prevNumber - 1);
-    onchange && onchange(number + 1);
+    onchange && onchange(number - 1);
   };
   return (
     <div className="number-picker">
