@@ -5,6 +5,7 @@ import { Button } from '../UI/Button/Button';
 import { useNavigate } from 'react-router-dom';
 import { useAnimate } from 'framer-motion';
 import { useEffect } from 'react';
+import { socket } from '../../socket';
 
 interface FormInputs {
   nickname: string;
@@ -21,7 +22,12 @@ export const CreateForm = ({ onCancel }: CreateFormProps) => {
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    console.log('join', data);
+    const { nickname } = data;
+
+    const roomCode = '12345';
+
+    socket.emit('create_room', roomCode, nickname);
+
     navigator('/room');
   };
 

@@ -4,7 +4,7 @@ import { ExpressPeerServer } from 'peer';
 import { Server, Socket } from 'socket.io';
 import cors from 'cors';
 
-import { createDatabaseTables, db } from './database';
+import { createDatabaseTables, db } from './Database/database';
 
 const app = express();
 app.use(cors());
@@ -42,9 +42,13 @@ const io = new Server(socketServer, {
   },
 });
 
-io.on('connection', (socket: Socket) => {
-  console.log('User connected ', socket.id);
-});
+const roomModule = require('./Modules/Room/roomModule');
+
+const handleModulesOnConnection = async (socket: Socket) => {
+  roomModule(socket, db);
+};
+
+io.on('connection', handleModulesOnConnection);
 
 socketServer.listen(SOCKET_PORT, () => {
   console.log(`Socket server is running on port ${SOCKET_PORT}`);
