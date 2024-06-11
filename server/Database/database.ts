@@ -10,7 +10,7 @@ export const db = new sqlite3.Database(':memory:', (err) => {
 export const createDatabaseTables = () => {
   db.serialize(() => {
     db.run(
-      `CREATE TABLE users ( 'id' VARCHAR(20) PRIMARY KEY, 'username' VARCHAR(16) NOT NULL, 'score' INTEGER NOT NULL, 'room_id' VARCHAR(5) NOT NULL )`
+      `CREATE TABLE users ( 'id' VARCHAR(20) PRIMARY KEY, 'nickname' VARCHAR(16) NOT NULL, 'score' INTEGER NOT NULL, 'room_id' VARCHAR(5) NOT NULL )`
     );
     db.run(`CREATE TABLE rooms (  'id' VARCHAR(5) PRIMARY KEY )`);
   });

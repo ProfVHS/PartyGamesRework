@@ -45,7 +45,8 @@ const io = new Server(socketServer, {
 const roomModule = require('./Modules/Room/roomModule');
 
 const handleModulesOnConnection = async (socket: Socket) => {
-  roomModule(socket, db);
+  console.log('New connection', socket.id);
+  roomModule(socket);
 };
 
 io.on('connection', handleModulesOnConnection);
