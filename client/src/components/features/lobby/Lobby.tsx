@@ -5,24 +5,42 @@ import { useState } from 'react';
 import { LobbySettings } from '../lobbysettings/LobbySettings';
 import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 
+import { AnimatePresence, motion } from 'framer-motion';
+
 export const Lobby = () => {
   const [lobbySettings, setLobbySettings] = useState(false);
   const toggleLobbySettings = () => setLobbySettings((prev) => !prev);
   return (
     <>
       <div className="lobby">
-        {!lobbySettings && (
-          <>
-            <LobbyContent />{' '}
-            <SettingsButton
-              className="lobby__settingsbutton"
-              onClick={() => toggleLobbySettings()}
-            />
-          </>
-        )}
-        {lobbySettings && (
-          <LobbySettings onCancel={() => setLobbySettings(false)} />
-        )}
+        <AnimatePresence mode="wait" initial={false}>
+          {lobbySettings ? (
+            <motion.div
+              key={'1'}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0, transition: { duration: 0.2 } }}
+              transition={{ delay: 0.2, duration: 0.2 }}
+            >
+              <LobbySettings onCancel={() => setLobbySettings(false)} />
+            </motion.div>
+          ) : (
+            <motion.div
+              className="lobby__content"
+              key={'2'}
+              initial={{ scale: 0.5, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.5, opacity: 0, transition: { duration: 0.2 } }}
+              transition={{ delay: 0.2, duration: 0.2 }}
+            >
+              <LobbyContent />
+              <SettingsButton
+                className="lobby__settingsbutton"
+                onClick={() => toggleLobbySettings()}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </>
   );
