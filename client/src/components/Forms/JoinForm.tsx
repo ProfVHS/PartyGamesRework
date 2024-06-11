@@ -4,6 +4,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '../UI/Button/Button';
 import { RowLayout } from '../layouts/RowLayout';
 import { useNavigate } from 'react-router-dom';
+import { socket } from '../../socket';
 
 interface FormInputs {
   nickname: string;
@@ -19,7 +20,7 @@ export const JoinForm = ({ onCancel }: JoinFormProps) => {
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    console.log('join', data);
+    socket.emit('join_room', data.room, data.nickname);
     navigator('/room');
   };
 
