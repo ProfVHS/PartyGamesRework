@@ -11,13 +11,11 @@ type LobbySettingsProps = {
 
 export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
   const [numberOfMinigames, setNumberOfMinigames] = useState(5);
-  const [maxPlayers, setMaxPlayers] = useState(8);
   const [tutorials, setTutorials] = useState(true);
 
   const handleSave = () => {
     console.log('Save');
     console.log('Number of Minigames:', numberOfMinigames);
-    console.log('Max Players:', maxPlayers);
     console.log('Tutorials:', tutorials);
   };
   return (
@@ -31,12 +29,6 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
         onchange={setNumberOfMinigames}
       />
       <span className="lobby-settings__text">Max Players</span>
-      <NumberPicker
-        min={3}
-        max={8}
-        defaultNumber={8}
-        onchange={setMaxPlayers}
-      />
       <span className="lobby-settings__text">Tutorials?</span>
       <BooleanPicker defaultBoolean={true} onchange={setTutorials} />
       <RowLayout>
