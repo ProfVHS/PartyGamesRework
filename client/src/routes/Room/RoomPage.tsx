@@ -13,21 +13,6 @@ export const RoomPage = () => {
     path: '/',
   });
 
-  useEffect(() => {
-    socket.on('user_joined', (nickname) => {
-      console.log('User joined', nickname);
-      setUsers((u) => [...u, nickname]);
-    });
-
-    return () => {
-      socket.off('user_joined');
-    };
-  }, [socket]);
-
-  useEffect(() => {
-    console.log(users);
-  }, [users]);
-
   return (
     <div className="room">
       <div className="room__grid">
