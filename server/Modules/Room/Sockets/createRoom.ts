@@ -2,6 +2,7 @@ import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
 import { sendUsersData } from '../../../Database/Users/sendUsersData';
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
+import { sendRoomData } from '../../../Database/Room/sendRoomData';
 
 export const createRoom = async (socket: Socket) => {
   socket.on('create_room', async (roomCode: string, nickname: string) => {
@@ -31,6 +32,7 @@ export const createRoom = async (socket: Socket) => {
       socket.join(roomCode);
 
       sendUsersData(socket, roomCode);
+      sendRoomData(socket, roomCode);
     });
   });
 };

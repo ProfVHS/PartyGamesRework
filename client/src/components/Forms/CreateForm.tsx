@@ -21,10 +21,24 @@ export const CreateForm = ({ onCancel }: CreateFormProps) => {
   const navigator = useNavigate();
   const { register, handleSubmit } = useForm<FormInputs>();
 
+  const randomRoomCode = () => {
+    const characters =
+      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    let result = '';
+
+    while (result.length < 5) {
+      result += characters.charAt(
+        Math.floor(Math.random() * characters.length)
+      );
+    }
+
+    return result;
+  };
+
   const onJoin: SubmitHandler<FormInputs> = (data) => {
     const { nickname } = data;
 
-    const roomCode = '12345';
+    const roomCode = randomRoomCode();
 
     socket.emit('create_room', roomCode, nickname);
 

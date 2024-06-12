@@ -4,9 +4,11 @@ import './Room.scss';
 import Peer from 'peerjs';
 import { socket } from '../../socket';
 import { userType } from '../../Types/userType';
+import { roomCodeContext } from '../../useContext/roomCodeContext';
 
 export const RoomPage = () => {
   const [users, setUsers] = useState<userType[]>([]);
+  const [roomCode, setRoomCode] = useState<string>('');
 
   const peer = new Peer('Peer-id', {
     host: 'localhost',
@@ -20,12 +22,12 @@ export const RoomPage = () => {
       setUsers(() => data);
     });
 
-    socket.on('test', () => {
-      console.log('Test');
+    socket.on('update_room', (data: roomType) => {
+      setRoomCode(() => data.id);
     });
 
-    socket.on('room_exists', (data: string) => {
-      console.log(data);
+    socket.on('test', () => {
+      console.log('Test');
     });
   }, []);
 
@@ -35,7 +37,9 @@ export const RoomPage = () => {
         {users.map((user) => (
           <Camera key={user.id} nickname={user.nickname} score={user.score} />
         ))}
-        <div className="room__content"></div>
+        <roomCodeContext.Provider value={roomCode}>
+          <div className="room__content">{roomCode}</div>
+        </roomCodeContext.Provider>
       </div>
     </div>
   );

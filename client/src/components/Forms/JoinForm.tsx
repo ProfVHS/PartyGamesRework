@@ -21,18 +21,24 @@ export const JoinForm = ({ onCancel }: JoinFormProps) => {
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    socket.emit('check_if_can_join', data.room);
+    socket.emit('check_if_can_join', data.room, data.nickname);
   };
 
   useEffect(() => {
     socket.on('cannot_join', (reason: string) => {
       alert(reason);
     });
-    socket.on('can_join', () => {
-      socket.emit('join_room', '12345', 'nickname');
+
+    socket.on('can_join', (roomCode: string, nickname: string) => {
+      socket.emit('join_room', roomCode, nickname);
 
       navigator('/room');
     });
+
+    return () => {
+      socket.off('cannot_join');
+      socket.off('can_join');
+    };
   }, [socket]);
 
   return (
