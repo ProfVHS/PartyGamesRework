@@ -6,6 +6,8 @@ import { LobbySettings } from '../lobbysettings/LobbySettings';
 import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 
 import { AnimatePresence, motion } from 'framer-motion';
+import { Modal } from '../../UI/Modal/Modal';
+import { MinigamesList } from '../minigamesList/MinigamesList';
 
 export const Lobby = () => {
   const [lobbySettings, setLobbySettings] = useState(false);
@@ -42,6 +44,9 @@ export const Lobby = () => {
           )}
         </AnimatePresence>
       </div>
+      <Modal>
+        <MinigamesList />
+      </Modal>
     </>
   );
 };

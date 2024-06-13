@@ -28,7 +28,6 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
         defaultNumber={5}
         onchange={setNumberOfMinigames}
       />
-      <span className="lobby-settings__text">Max Players</span>
       <span className="lobby-settings__text">Tutorials?</span>
       <BooleanPicker defaultBoolean={true} onchange={setTutorials} />
       <RowLayout>
