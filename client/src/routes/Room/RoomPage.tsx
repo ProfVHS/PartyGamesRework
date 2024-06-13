@@ -18,8 +18,6 @@ export const RoomPage = () => {
     socket.emit('get_users');
     socket.emit('get_room');
 
-    peerConnection(socket, users);
-
     onceDone.current = true;
   }, []);
 
