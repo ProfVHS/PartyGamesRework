@@ -1,45 +1,58 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef, useContext } from 'react';
 import { Camera } from '../../components/features/camera/Camera';
 import './Room.scss';
-import Peer from 'peerjs';
 import { socket } from '../../socket';
 import { userType } from '../../Types/userType';
 import { roomCodeContext } from '../../useContext/roomCodeContext';
+import { peerConnection } from '../../../../server/Peer/peerConnection';
 
 export const RoomPage = () => {
   const [users, setUsers] = useState<userType[]>([]);
-  const [roomCode, setRoomCode] = useState<string>('');
+  const [room, setRoom] = useState<roomType>({ id: '' });
 
-  const peer = new Peer('Peer-id', {
-    host: 'localhost',
-    port: 9000,
-    path: '/',
-  });
+  const onceDone = useRef(false);
+
+  useEffect(() => {
+    if (onceDone.current) return;
+
+    socket.emit('get_users');
+    socket.emit('get_room');
+
+    peerConnection(socket, users);
+
+    onceDone.current = true;
+  }, []);
 
   useEffect(() => {
     socket.on('update_users', (data: userType[]) => {
-      console.log('User joined', data);
+      console.log('Users Updated', data);
       setUsers(() => data);
     });
 
     socket.on('update_room', (data: roomType) => {
-      setRoomCode(() => data.id);
+      console.log('Room updated', data);
+      setRoom(() => data);
     });
 
-    socket.on('test', () => {
-      console.log('Test');
-    });
-  }, []);
+    return () => {
+      socket.off('update_users');
+      socket.off('update_room');
+    };
+  }, [socket]);
 
   return (
     <div className="room">
       <div className="room__grid">
         {users.map((user) => (
-          <Camera key={user.id} nickname={user.nickname} score={user.score} />
+          <Camera
+            key={user.id}
+            videoId={`${user.id}camera__video`}
+            nickname={user.nickname}
+            score={user.score}
+          />
         ))}
-        <roomCodeContext.Provider value={roomCode}>
-          <div className="room__content">{roomCode}</div>
-        </roomCodeContext.Provider>
+
+        <div className="room__content">RoomCode - {room.id}</div>
       </div>
     </div>
   );

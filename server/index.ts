@@ -42,11 +42,13 @@ const io = new Server(socketServer, {
   },
 });
 
-const roomModule = require('./Modules/Room/roomModule');
+import { roomModule } from './Modules/Room/roomModule';
+import { usersModule } from './Modules/User/usersModule';
 
 const handleModulesOnConnection = async (socket: Socket) => {
   console.log('New connection', socket.id);
   roomModule(socket);
+  usersModule(socket);
 };
 
 io.on('connection', handleModulesOnConnection);

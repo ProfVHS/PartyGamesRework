@@ -1,11 +1,9 @@
 import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
-import { sendUsersData } from '../../../Database/Users/sendUsersData';
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
-import { sendRoomData } from '../../../Database/Room/sendRoomData';
 
 export const joinRoom = async (socket: Socket) => {
-  socket.on('check_if_can_join', async (roomCode: string, nickname: string) => {
+  socket.on('join_room', async (roomCode, nickname) => {
     const roomExistence: boolean = (
       await checkRoomExistence(roomCode)
     ).valueOf();
@@ -35,10 +33,6 @@ export const joinRoom = async (socket: Socket) => {
       return;
     }
 
-    socket.nsp.to(socket.id).emit('can_join', roomCode, nickname);
-  });
-
-  socket.on('join_room', async (roomCode, nickname) => {
     await new Promise(() => {
       db.run(
         `INSERT INTO users (id, nickname, score, room_id) VALUES (?, ?, ?, ?)`,
@@ -50,11 +44,11 @@ export const joinRoom = async (socket: Socket) => {
           }
         }
       );
+      console.log('User joined room:', roomCode);
 
       socket.join(roomCode);
 
-      sendUsersData(socket, roomCode);
-      sendRoomData(socket, roomCode);
+      socket.nsp.to(socket.id).emit('can_join');
     });
   });
 };

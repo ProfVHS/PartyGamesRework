@@ -1,11 +1,16 @@
 import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
-import { sendUsersData } from '../../../Database/Users/sendUsersData';
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
-import { sendRoomData } from '../../../Database/Room/sendRoomData';
 
 export const createRoom = async (socket: Socket) => {
   socket.on('create_room', async (roomCode: string, nickname: string) => {
+    const roomExistence = (await checkRoomExistence(roomCode)).valueOf();
+
+    if (roomExistence) {
+      socket.nsp.to(socket.id).emit('cannot_join');
+      return;
+    }
+
     await new Promise<void>(async (resolve) => {
       db.run(`INSERT INTO rooms (id) VALUES (?)`, [roomCode], (err) => {
         if (err) {
@@ -23,7 +28,7 @@ export const createRoom = async (socket: Socket) => {
             console.error('createRoom.ts: Users Insert');
             console.error(err.message);
           } else {
-            console.log('User created');
+            console.log('User joined room:', roomCode);
             resolve();
           }
         }
@@ -31,8 +36,7 @@ export const createRoom = async (socket: Socket) => {
     }).then(async () => {
       socket.join(roomCode);
 
-      sendUsersData(socket, roomCode);
-      sendRoomData(socket, roomCode);
+      socket.nsp.to(socket.id).emit('can_join');
     });
   });
 };

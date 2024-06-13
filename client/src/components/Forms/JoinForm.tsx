@@ -5,7 +5,7 @@ import { Button } from '../UI/Button/Button';
 import { RowLayout } from '../layouts/RowLayout';
 import { useNavigate } from 'react-router-dom';
 import { socket } from '../../socket';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 interface FormInputs {
   nickname: string;
@@ -21,7 +21,7 @@ export const JoinForm = ({ onCancel }: JoinFormProps) => {
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    socket.emit('check_if_can_join', data.room, data.nickname);
+    socket.emit('join_room', data.room, data.nickname);
   };
 
   useEffect(() => {
@@ -29,9 +29,7 @@ export const JoinForm = ({ onCancel }: JoinFormProps) => {
       alert(reason);
     });
 
-    socket.on('can_join', (roomCode: string, nickname: string) => {
-      socket.emit('join_room', roomCode, nickname);
-
+    socket.on('can_join', () => {
       navigator('/room');
     });
 
@@ -51,6 +49,7 @@ export const JoinForm = ({ onCancel }: JoinFormProps) => {
         placeholder="Nickname"
         {...register('nickname')}
       />
+
       <RowLayout>
         <Button style={{ width: '50%' }} type="submit">
           Join

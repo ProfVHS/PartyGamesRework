@@ -16,36 +16,45 @@ type CreateFormProps = {
   onCancel: () => void;
 };
 
+const randomRoomCode = () => {
+  const characters =
+    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let result = '';
+
+  while (result.length < 5) {
+    result += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+
+  return result;
+};
+
 export const CreateForm = ({ onCancel }: CreateFormProps) => {
   const [scope, animate] = useAnimate();
   const navigator = useNavigate();
   const { register, handleSubmit } = useForm<FormInputs>();
-
-  const randomRoomCode = () => {
-    const characters =
-      'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let result = '';
-
-    while (result.length < 5) {
-      result += characters.charAt(
-        Math.floor(Math.random() * characters.length)
-      );
-    }
-
-    return result;
-  };
+  const roomCode = randomRoomCode();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    const { nickname } = data;
-
-    const roomCode = randomRoomCode();
+    const nickname = data.nickname;
 
     socket.emit('create_room', roomCode, nickname);
-
-    navigator('/room');
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    socket.on('cannot_join', () => {
+      const roomCode = randomRoomCode();
+
+      socket.emit('create_room', roomCode);
+    });
+    socket.on('can_join', () => {
+      navigator('/room');
+    });
+
+    return () => {
+      socket.off('cannot_join');
+      socket.off('can_join');
+    };
+  }, [socket]);
 
   return (
     <form
@@ -62,6 +71,7 @@ export const CreateForm = ({ onCancel }: CreateFormProps) => {
         placeholder="Nickname"
         {...register('nickname')}
       />
+
       <Button style={{ width: '100%' }} type="submit">
         Create
       </Button>
