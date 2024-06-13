@@ -5,7 +5,7 @@ import { Button } from '../UI/Button/Button';
 import { RowLayout } from '../layouts/RowLayout';
 import { useNavigate } from 'react-router-dom';
 import { socket } from '../../socket';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface FormInputs {
   nickname: string;

@@ -16,8 +16,6 @@ export const createRoom = async (socket: Socket) => {
         if (err) {
           console.error('createRoom.ts: Room Insert');
           console.error(err.message);
-        } else {
-          console.log('Room created');
         }
       });
       db.run(
@@ -28,7 +26,6 @@ export const createRoom = async (socket: Socket) => {
             console.error('createRoom.ts: Users Insert');
             console.error(err.message);
           } else {
-            console.log('User joined room:', roomCode);
             resolve();
           }
         }

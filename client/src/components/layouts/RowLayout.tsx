@@ -3,13 +3,11 @@ import React from 'react';
 type RowLayoutProps = {
   children: React.ReactNode;
   gap?: number;
-  ref?: React.RefObject<HTMLDivElement>;
 };
 
-export const RowLayout = ({ children, gap, ref }: RowLayoutProps) => {
+export const RowLayout = ({ children, gap }: RowLayoutProps) => {
   return (
     <div
-      ref={ref}
       style={{
         display: 'flex',
         justifyContent: 'center',

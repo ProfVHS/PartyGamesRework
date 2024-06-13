@@ -44,7 +44,6 @@ export const joinRoom = async (socket: Socket) => {
           }
         }
       );
-      console.log('User joined room:', roomCode);
 
       socket.join(roomCode);
 
