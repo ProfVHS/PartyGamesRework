@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './MinigamesListStyle.scss';
 import { motion, Reorder, useDragControls } from 'framer-motion';
 import { Button } from '../../UI/Button/Button';
+import { BombIcon } from './SvgIcons';
 
 type Minigame = {
   id: string;
@@ -24,11 +25,16 @@ export const MinigamesList = () => {
           minigameId="CTB"
           onClick={addMinigame}
         />
+        <AddMinigame
+          minigameName="Click The Bomb"
+          minigameId="CTB"
+          onClick={addMinigame}
+        />
       </div>
       <div className="minigames-list__table">
         <span className="minigames-list__title">Your minigames queue</span>
         {items.map((item) => (
-          <div className="minigames-list__minigame">{item.name}</div>
+          <MinigameItem key={item.id} minigame={item} />
         ))}
       </div>
       <div className="minigames-list__footer">
@@ -49,12 +55,40 @@ const AddMinigame = ({
   minigameName,
   minigameId,
 }: AddMinigameProps) => {
+  const handleAddMinigame = () => {
+    const newMinigame = { id: minigameId, name: minigameName };
+    onClick(newMinigame);
+  };
+
   return (
-    <div className="minigames-list__addminigame">
-      <span>{minigameName}</span>
-      <button onClick={() => onClick({ name: minigameName, id: minigameId })}>
-        Add
-      </button>
+    <div className="minigames-list__minigame">
+      <div className="minigames-list__minigame-icon">
+        {minigameId === 'CTB' && <BombIcon height={25} />}
+      </div>
+      <div className="minigames-list__minigame-content">
+        <span>{minigameName}</span>
+        <Button variant="round" onClick={handleAddMinigame}>
+          Add
+        </Button>
+      </div>
+    </div>
+  );
+};
+
+type MinigameItemProps = {
+  minigame: Minigame;
+};
+
+const MinigameItem = ({ minigame }: MinigameItemProps) => {
+  return (
+    <div className="minigames-list__minigame">
+      <div className="minigames-list__minigame-icon">
+        {minigame.id === 'CTB' && <BombIcon height={25} />}
+      </div>
+      <div className="minigames-list__minigame-content">
+        <span>{minigame.name}</span>
+        <Button variant="round">Remove</Button>
+      </div>
     </div>
   );
 };
