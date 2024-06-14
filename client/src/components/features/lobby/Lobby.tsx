@@ -44,9 +44,6 @@ export const Lobby = () => {
           )}
         </AnimatePresence>
       </div>
-      <Modal>
-        <MinigamesList />
-      </Modal>
     </>
   );
 };
