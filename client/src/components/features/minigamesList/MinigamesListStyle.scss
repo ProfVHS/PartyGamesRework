@@ -53,6 +53,14 @@
     color: rgba(#000, $alpha: 0.4);
     font-weight: 700;
 
+    &.draggable {
+      cursor: grab;
+
+      &:active {
+        cursor: grabbing;
+      }
+    }
+
     &-content {
       background-color: $color;
 
