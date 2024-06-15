@@ -9,24 +9,32 @@ import { MinigamesList } from '../minigamesList/MinigamesList';
 import { AnimatePresence } from 'framer-motion';
 import { Minigame } from '../../../types/Minigame';
 import { Switch } from '../../UI/Switch/Switch';
+import { LobbySettingsType } from '../../../types/LobbySettings';
 
 type LobbySettingsProps = {
   onCancel: () => void;
+  lobbySettings: LobbySettingsType;
+  setLobbySettings: (settings: LobbySettingsType) => void;
 };
 
-export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
-  const [numberOfMinigames, setNumberOfMinigames] = useState(5);
-  const [isTutorialsEnabled, setIsTutorialEnabled] = useState(true);
-  const [minigames, setMinigames] = useState<Minigame[]>([]);
-
-  const [isRandomMinigames, setIsRandomMinigames] = useState(true);
+export const LobbySettings = ({
+  onCancel,
+  lobbySettings,
+  setLobbySettings,
+}: LobbySettingsProps) => {
   const [minigamesModal, setMinigamesModal] = useState(false);
+
+  const [newSettings, setNewSettings] =
+    useState<LobbySettingsType>(lobbySettings);
 
   const handleSave = () => {
     console.log('Save');
-    console.log('Number of Minigames:', numberOfMinigames);
-    console.log('Tutorials:', isTutorialsEnabled);
-    console.log('Minigames:', minigames);
+    console.log('Number of Minigames:', newSettings?.numberOfMinigames);
+    console.log('Tutorials:', newSettings?.isTutorialsEnabled);
+    console.log('Minigames:', newSettings?.minigames);
+
+    setLobbySettings(newSettings);
+    onCancel();
   };
   return (
     <div className="lobby-settings">
@@ -35,21 +43,25 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
       <RowLayout justifyContent="space-between">
         <span>Random Minigames?</span>
         <Switch
-          defaultIsChecked={isRandomMinigames}
-          onChange={setIsRandomMinigames}
+          defaultIsChecked={newSettings.isRandomMinigames}
+          onChange={(value) =>
+            setNewSettings({ ...newSettings, isRandomMinigames: value })
+          }
         />
       </RowLayout>
 
       <div className="lobby-settings__separator"></div>
 
-      {isRandomMinigames ? (
+      {newSettings.isRandomMinigames ? (
         <RowLayout justifyContent="space-between">
           <span>Number of Minigames</span>
           <NumberPicker
-            defaultNumber={numberOfMinigames}
+            defaultNumber={lobbySettings.numberOfMinigames || 2}
             min={2}
             max={25}
-            onchange={(value) => setNumberOfMinigames(value)}
+            onchange={(value) =>
+              setNewSettings({ ...newSettings, numberOfMinigames: value })
+            }
           />
         </RowLayout>
       ) : (
@@ -70,8 +82,10 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
       <RowLayout justifyContent="space-between">
         <span>Tutorials before minigame?</span>
         <Switch
-          defaultIsChecked={isTutorialsEnabled}
-          onChange={setIsTutorialEnabled}
+          defaultIsChecked={lobbySettings.isTutorialsEnabled}
+          onChange={(value) =>
+            setNewSettings({ ...lobbySettings, isTutorialsEnabled: value })
+          }
         />
       </RowLayout>
 
@@ -90,8 +104,10 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
           <Modal onClose={() => setMinigamesModal(false)}>
             <MinigamesList
               onCancel={() => setMinigamesModal(false)}
-              onSave={setMinigames}
-              minigames={minigames}
+              onSave={(minigames: Minigame[]) =>
+                setNewSettings({ ...newSettings, minigames })
+              }
+              minigames={lobbySettings.minigames || []}
             />
           </Modal>
         )}

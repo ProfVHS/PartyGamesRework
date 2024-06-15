@@ -6,17 +6,22 @@ import { LobbySettings } from '../lobbysettings/LobbySettings';
 import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { Modal } from '../../UI/Modal/Modal';
-import { MinigamesList } from '../minigamesList/MinigamesList';
+import { LobbySettingsType } from '../../../types/LobbySettings';
 
 export const Lobby = () => {
-  const [lobbySettings, setLobbySettings] = useState(false);
-  const toggleLobbySettings = () => setLobbySettings((prev) => !prev);
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+
+  const [lobbySettings, setLobbySettings] = useState<LobbySettingsType>({
+    isRandomMinigames: true,
+    isTutorialsEnabled: true,
+  });
+
+  const toggleLobbySettings = () => setIsSettingsOpen((prev) => !prev);
   return (
     <>
       <div className="lobby">
         <AnimatePresence mode="wait" initial={false}>
-          {lobbySettings ? (
+          {isSettingsOpen ? (
             <motion.div
               key={'1'}
               initial={{ scale: 0.5, opacity: 0 }}
@@ -25,7 +30,11 @@ export const Lobby = () => {
               transition={{ delay: 0.2, duration: 0.2 }}
               style={{ height: '100%' }}
             >
-              <LobbySettings onCancel={() => setLobbySettings(false)} />
+              <LobbySettings
+                onCancel={() => setIsSettingsOpen(false)}
+                lobbySettings={lobbySettings}
+                setLobbySettings={setLobbySettings}
+              />
             </motion.div>
           ) : (
             <motion.div
