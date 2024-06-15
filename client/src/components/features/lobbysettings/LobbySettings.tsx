@@ -16,7 +16,7 @@ type LobbySettingsProps = {
 
 export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
   const [numberOfMinigames, setNumberOfMinigames] = useState(5);
-  const [tutorials, setTutorials] = useState(true);
+  const [isTutorialsEnabled, setIsTutorialEnabled] = useState(true);
   const [minigames, setMinigames] = useState<Minigame[]>([]);
 
   const [isRandomMinigames, setIsRandomMinigames] = useState(true);
@@ -25,7 +25,7 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
   const handleSave = () => {
     console.log('Save');
     console.log('Number of Minigames:', numberOfMinigames);
-    console.log('Tutorials:', tutorials);
+    console.log('Tutorials:', isTutorialsEnabled);
     console.log('Minigames:', minigames);
   };
   return (
@@ -47,6 +47,8 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
           <span>Number of Minigames</span>
           <NumberPicker
             defaultNumber={numberOfMinigames}
+            min={2}
+            max={25}
             onchange={(value) => setNumberOfMinigames(value)}
           />
         </RowLayout>
@@ -67,7 +69,10 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
 
       <RowLayout justifyContent="space-between">
         <span>Tutorials before minigame?</span>
-        <Switch />
+        <Switch
+          defaultIsChecked={isTutorialsEnabled}
+          onChange={setIsTutorialEnabled}
+        />
       </RowLayout>
 
       <div className="lobby-settings__separator"></div>

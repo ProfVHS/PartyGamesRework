@@ -28,7 +28,7 @@ export const NumberPicker = ({
     onchange && onchange(number - 1);
   };
   return (
-    <div className="number-picker" style={style}>
+    <div className="number-picker number-picker--smallSize" style={style}>
       <span className="number-picker__button" onClick={decrement}>
         -
       </span>

@@ -3,7 +3,6 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   justify-content: space-evenly;
-  width: 100%;
   user-select: none;
 
   font-size: 1.5rem;
@@ -14,6 +13,8 @@
   box-shadow: 0 4px 0 0 #5a189a;
   border-radius: 4px;
 
+  transform: translate(0, -2px);
+
   &__button {
     cursor: pointer;
     display: flex;
@@ -22,6 +23,7 @@
 
     transition: all 0.05s;
     height: 100%;
+
     &:active {
       background-color: $darkerPrimaryColor;
     }
@@ -32,5 +34,19 @@
     align-items: center;
     border-left: 2px solid rgba(255, 255, 255, 0.2);
     border-right: 2px solid rgba(255, 255, 255, 0.2);
+  }
+
+  // ==== Sizes ====
+  &--smallSize {
+    font-size: 1.2rem;
+    width: 35%;
+  }
+  &--mediumSize {
+    font-size: 1.4rem;
+    width: 60%;
+  }
+  &--largeSize {
+    font-size: 1.6rem;
+    width: 100%;
   }
 }

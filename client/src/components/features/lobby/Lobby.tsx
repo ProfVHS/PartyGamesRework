@@ -61,7 +61,7 @@ const LobbyContent = () => {
   return (
     <>
       <span className="lobby__title">Room Code: 12345</span>
-      <RowLayout>
+      <RowLayout justifyContent="center">
         <span className="lobby__players">{playersReady}</span>
         <span className="lobby__text">Players ready</span>
       </RowLayout>
