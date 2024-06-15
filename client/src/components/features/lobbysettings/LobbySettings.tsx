@@ -8,6 +8,7 @@ import { Modal } from '../../UI/Modal/Modal';
 import { MinigamesList } from '../minigamesList/MinigamesList';
 import { AnimatePresence } from 'framer-motion';
 import { Minigame } from '../../../types/Minigame';
+import { Switch } from '../../UI/Switch/Switch';
 
 type LobbySettingsProps = {
   onCancel: () => void;
@@ -18,6 +19,7 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
   const [tutorials, setTutorials] = useState(true);
   const [minigames, setMinigames] = useState<Minigame[]>([]);
 
+  const [isRandomMinigames, setIsRandomMinigames] = useState(true);
   const [minigamesModal, setMinigamesModal] = useState(false);
 
   const handleSave = () => {
@@ -29,18 +31,39 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
   return (
     <div className="lobby-settings">
       <span className="lobby-settings__title">Room Settings</span>
-      <span className="lobby-settings__text">Number of Minigames</span>
-      <NumberPicker
-        min={2}
-        max={20}
-        defaultNumber={5}
-        onchange={setNumberOfMinigames}
-      />
-      <span className="lobby-settings__text">Number of Minigames</span>
-      <Button onClick={() => setMinigamesModal(true)}>Set Minigames</Button>
-      <span className="lobby-settings__text">Tutorials?</span>
-      <BooleanPicker defaultBoolean={true} onchange={setTutorials} />
-      <RowLayout>
+
+      <RowLayout justifyContent="space-between">
+        <span>Random Minigames?</span>
+        <Switch defaultIsChecked={isRandomMinigames} />
+      </RowLayout>
+
+      <div className="lobby-settings__separator"></div>
+
+      {isRandomMinigames ? (
+        <RowLayout justifyContent="space-between">
+          <span>Number of Minigames</span>
+          <NumberPicker
+            defaultNumber={numberOfMinigames}
+            onchange={(value) => setNumberOfMinigames(value)}
+          />
+        </RowLayout>
+      ) : (
+        <RowLayout justifyContent="space-between">
+          <span>Minigames</span>
+          <Button onClick={() => setMinigamesModal(true)}>Select</Button>
+        </RowLayout>
+      )}
+
+      <div className="lobby-settings__separator"></div>
+
+      <RowLayout justifyContent="space-between">
+        <span>Tutorials before minigame?</span>
+        <Switch />
+      </RowLayout>
+
+      <div className="lobby-settings__separator"></div>
+
+      <RowLayout justifyContent="space-between">
         <Button style={{ width: '100%' }} onClick={handleSave}>
           Save
         </Button>

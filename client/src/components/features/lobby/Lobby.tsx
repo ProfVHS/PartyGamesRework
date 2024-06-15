@@ -23,6 +23,7 @@ export const Lobby = () => {
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.5, opacity: 0, transition: { duration: 0.2 } }}
               transition={{ delay: 0.2, duration: 0.2 }}
+              style={{ height: '100%' }}
             >
               <LobbySettings onCancel={() => setLobbySettings(false)} />
             </motion.div>
