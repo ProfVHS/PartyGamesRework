@@ -34,7 +34,10 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
 
       <RowLayout justifyContent="space-between">
         <span>Random Minigames?</span>
-        <Switch defaultIsChecked={isRandomMinigames} />
+        <Switch
+          defaultIsChecked={isRandomMinigames}
+          onChange={setIsRandomMinigames}
+        />
       </RowLayout>
 
       <div className="lobby-settings__separator"></div>
@@ -50,7 +53,13 @@ export const LobbySettings = ({ onCancel }: LobbySettingsProps) => {
       ) : (
         <RowLayout justifyContent="space-between">
           <span>Minigames</span>
-          <Button onClick={() => setMinigamesModal(true)}>Select</Button>
+          <Button
+            color="primary"
+            size="small"
+            onClick={() => setMinigamesModal(true)}
+          >
+            Open List
+          </Button>
         </RowLayout>
       )}
 

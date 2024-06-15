@@ -8,6 +8,7 @@ type ButtonProps = {
   type?: 'button' | 'submit' | 'reset';
   variant?: 'square' | 'round';
   color?: 'primary' | 'remove';
+  size?: 'small' | 'medium' | 'large';
 };
 
 export const Button = ({
@@ -17,12 +18,13 @@ export const Button = ({
   type,
   variant,
   color,
+  size,
 }: ButtonProps) => {
   return (
     <button
       className={`button button${
-        variant ? '__' + variant : '__square'
-      } ${color}`}
+        variant ? '--' + variant : '--square'
+      } button--${color ?? 'primary'}Color button--${size ?? 'medium'}Size`}
       type={type}
       style={style}
       onClick={onClick}

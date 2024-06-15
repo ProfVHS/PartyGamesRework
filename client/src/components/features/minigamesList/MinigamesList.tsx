@@ -114,6 +114,7 @@ const MinigameItem = ({ minigame, type, onClick }: MinigameItemProps) => {
           onClick={() => onClick && onClick(minigame)}
           variant="round"
           color={`${type === 'remove' ? 'remove' : 'primary'}`}
+          size="small"
         >
           {type}
         </Button>
