@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { RowLayout } from '../../layouts/RowLayout';
-import { BooleanPicker } from '../../UI/BooleanPicker/BooleanPicker';
 import { Button } from '../../UI/Button/Button';
 import { NumberPicker } from '../../UI/NumberPicker/NumberPicker';
 import './LobbySettingsStyle.scss';
@@ -10,6 +9,8 @@ import { AnimatePresence } from 'framer-motion';
 import { Minigame } from '../../../types/Minigame';
 import { Switch } from '../../UI/Switch/Switch';
 import { LobbySettingsType } from '../../../types/LobbySettings';
+import { Alert } from '../../UI/Alert/Alert';
+import { AlertType } from '../../../types/AlertType';
 
 type LobbySettingsProps = {
   onCancel: () => void;
@@ -23,19 +24,27 @@ export const LobbySettings = ({
   setLobbySettings,
 }: LobbySettingsProps) => {
   const [minigamesModal, setMinigamesModal] = useState(false);
+  const [showAlert, setShowAlert] = useState<AlertType | null>(null);
 
   const [newSettings, setNewSettings] =
     useState<LobbySettingsType>(lobbySettings);
 
   const handleSave = () => {
-    console.log('Save');
-    console.log('Number of Minigames:', newSettings?.numberOfMinigames);
-    console.log('Tutorials:', newSettings?.isTutorialsEnabled);
-    console.log('Minigames:', newSettings?.minigames);
-
+    if (!newSettings.isRandomMinigames) {
+      if (newSettings.minigames === null || newSettings.minigames!.length < 2) {
+        setShowAlert({
+          message: 'Please select at least two minigame',
+          type: 'error',
+          duration: 5,
+        });
+        return;
+      }
+    }
+    setShowAlert(null);
     setLobbySettings(newSettings);
     onCancel();
   };
+
   return (
     <div className="lobby-settings">
       <span className="lobby-settings__title">Room Settings</span>
@@ -84,7 +93,7 @@ export const LobbySettings = ({
         <Switch
           defaultIsChecked={lobbySettings.isTutorialsEnabled}
           onChange={(value) =>
-            setNewSettings({ ...lobbySettings, isTutorialsEnabled: value })
+            setNewSettings({ ...newSettings, isTutorialsEnabled: value })
           }
         />
       </RowLayout>
@@ -107,11 +116,12 @@ export const LobbySettings = ({
               onSave={(minigames: Minigame[]) =>
                 setNewSettings({ ...newSettings, minigames })
               }
-              minigames={lobbySettings.minigames || []}
+              minigames={newSettings.minigames || []}
             />
           </Modal>
         )}
       </AnimatePresence>
+      {showAlert && <Alert {...showAlert} onClose={() => setShowAlert(null)} />}
     </div>
   );
 };

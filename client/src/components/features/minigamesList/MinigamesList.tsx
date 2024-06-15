@@ -4,6 +4,7 @@ import { Reorder } from 'framer-motion';
 import { Button } from '../../UI/Button/Button';
 import { BombIcon } from './SvgIcons';
 import { Minigame } from '../../../types/Minigame';
+import { Alert } from '../../UI/Alert/Alert';
 
 type MinigamesListProps = {
   onCancel?: () => void;
