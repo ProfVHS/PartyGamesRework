@@ -14,6 +14,7 @@ export const Lobby = () => {
   const [lobbySettings, setLobbySettings] = useState<LobbySettingsType>({
     isRandomMinigames: true,
     isTutorialsEnabled: true,
+    minigames: [],
   });
 
   const toggleLobbySettings = () => setIsSettingsOpen((prev) => !prev);
