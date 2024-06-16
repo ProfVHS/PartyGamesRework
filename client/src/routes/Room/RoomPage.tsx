@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Camera } from '../../components/features/camera/Camera';
+import { Lobby } from '../../components/features/lobby/Lobby';
 import './Room.scss';
 import Peer from 'peerjs';
 import { socket } from '../../socket';
@@ -19,7 +20,9 @@ export const RoomPage = () => {
         {users.map((user) => (
           <Camera nickname={user} score={0} />
         ))}
-        <div className="room__content"></div>
+        <div className="room__content">
+          <Lobby />
+        </div>
       </div>
     </div>
   );

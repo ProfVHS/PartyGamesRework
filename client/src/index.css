@@ -1,3 +1,7 @@
+html {
+  font-size: 16px;
+  font-family: 'Poppins', sans-serif;
+}
 body {
   margin: 0;
   display: flex;
@@ -6,7 +10,7 @@ body {
   min-height: 100vh;
 
   background-color: #f1eaf7;
-  background-image: url("./assets/textures/background.svg");
+  background-image: url('./assets/textures/background.svg');
   animation: backgroundAnimation 40s linear infinite;
 }
 

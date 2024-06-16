@@ -1,0 +1,58 @@
+.alert {
+  display: flex;
+  align-items: center;
+  position: fixed;
+
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  padding: 8px 32px 8px 8px;
+
+  width: 30%;
+  min-width: 375px;
+
+  color: rgba(#000, 0.6);
+  font-weight: 600;
+
+  border-radius: 8px;
+  box-sizing: border-box;
+  box-shadow: 0 0 4px 2px rgba(#000, 0.1);
+
+  &__progress {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 6px;
+    background-color: rgba(#000, 0.2);
+    border-radius: 0 0 4px 4px;
+
+    transition: 1s linear;
+  }
+
+  &__icon {
+    width: 24px;
+    height: 24px;
+    & path {
+      fill: rgba(#000000, 0.6);
+    }
+  }
+
+  &__message {
+    margin-left: 12px;
+  }
+
+  &--success {
+    background-color: #72d8ad;
+  }
+  &--error {
+    background-color: #ff5656;
+  }
+  &--info {
+    background-color: #8794f8;
+  }
+  &--warning {
+    background-color: #ffcd5a;
+  }
+}

@@ -1,0 +1,53 @@
+@import '../../../sassStyles/variables.scss';
+.lobby {
+  gap: 15px;
+  box-sizing: border-box;
+  height: 360px;
+
+  width: 75%;
+  min-width: 325px;
+
+  max-width: 450px;
+
+  background-color: #fff;
+  box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.2);
+
+  border-radius: 8px;
+  font-size: 2rem;
+
+  user-select: none;
+
+  &__title {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 700;
+    color: $darkerPrimaryColor;
+  }
+
+  &__players {
+    font-family: 'Spicy Rice', cursive;
+    font-size: 3em;
+    color: $darkerPrimaryColor;
+  }
+  &__text {
+    display: inline-block;
+    width: 3em;
+    font-size: 0.7em;
+    font-family: 'Spicy Rice', cursive;
+    color: $secondaryColor;
+  }
+  &__settingsbutton {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+  }
+  &__content {
+    position: relative;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 8px;
+  }
+}

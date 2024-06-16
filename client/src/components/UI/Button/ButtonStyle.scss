@@ -1,22 +1,64 @@
+@import '../../../sassStyles/variables.scss';
 .button {
-  background-color: #b87de8;
-  border: none;
-  border-radius: 4px;
-  box-shadow: 0 4px 0 0 #5a189a;
-  box-sizing: border-box;
-
-  padding: 2px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   color: #fff;
-  font-size: 24px;
-  font-family: "Poppins", sans-serif;
+  font-size: 1.5rem;
+  font-family: 'Poppins', sans-serif;
   font-weight: 700;
   font-style: normal;
+  text-transform: capitalize;
 
-  transition: all 0.05s;
+  border: none;
   cursor: pointer;
+
+  transform: translate(0, -2px);
+
   &:active {
-    box-shadow: 0 2px 0 0 #5a189a;
-    transform: translateY(2px);
+    transform: translateY(1px);
+  }
+
+  &--square {
+    border-radius: 4px;
+  }
+
+  &--round {
+    border-radius: 32px;
+  }
+
+  //==== Sizes ====//
+
+  &--smallSize {
+    padding: 2px 16px;
+    font-size: 1rem;
+  }
+
+  &--mediumSize {
+    font-size: 1.5rem;
+    padding: 2px 16px;
+  }
+
+  &--largeSize {
+    font-size: 2rem;
+    padding: 4px 16px;
+  }
+
+  //==== Colors ====//
+
+  &--primaryColor {
+    background-color: $primaryColor;
+    box-shadow: 0 4px 0 0 darken($primaryColor, 30%);
+    &:active {
+      box-shadow: 0 2px 0 0 darken($primaryColor, 30%);
+    }
+  }
+  &--removeColor {
+    background-color: #c81414;
+    box-shadow: 0 4px 0 0 darken(#c81414, 20%);
+    &:active {
+      box-shadow: 0 2px 0 0 darken($primaryColor, 30%);
+    }
   }
 }
