@@ -1,19 +1,25 @@
+import { useEffect, useState } from 'react';
 import { Camera } from '../../components/features/camera/Camera';
 import { Lobby } from '../../components/features/lobby/Lobby';
 import './Room.scss';
+import Peer from 'peerjs';
+import { socket } from '../../socket';
 
 export const RoomPage = () => {
+  const [users, setUsers] = useState<string[]>([]);
+
+  const peer = new Peer('Peer-id', {
+    host: 'localhost',
+    port: 9000,
+    path: '/',
+  });
+
   return (
     <div className="room">
       <div className="room__grid">
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
-        <Camera nickname="Ultra Mango Guy" score={0} />
+        {users.map((user) => (
+          <Camera nickname={user} score={0} />
+        ))}
         <div className="room__content">
           <Lobby />
         </div>
