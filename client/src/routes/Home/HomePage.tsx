@@ -37,7 +37,7 @@ export const HomePage = () => {
         <span className="home__title">Party Games</span>
         <div className="home__forms" ref={scope}>
           {status === 'selecting' && (
-            <RowLayout ref={scope}>
+            <RowLayout>
               <Button
                 style={{ width: '50%' }}
                 onClick={() => changeStatus('create')}

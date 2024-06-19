@@ -1,0 +1,3 @@
+type roomType = {
+  id: string;
+};
