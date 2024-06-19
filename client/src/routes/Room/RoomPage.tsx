@@ -4,7 +4,6 @@ import './Room.scss';
 import { socket } from '../../socket';
 import { userType } from '../../Types/userType';
 import { roomCodeContext } from '../../useContext/roomCodeContext';
-import { peerConnection } from '../../../../server/Peer/peerConnection';
 
 export const RoomPage = () => {
   const [users, setUsers] = useState<userType[]>([]);
@@ -42,12 +41,7 @@ export const RoomPage = () => {
     <div className="room">
       <div className="room__grid">
         {users.map((user) => (
-          <Camera
-            key={user.id}
-            videoId={`${user.id}camera__video`}
-            nickname={user.nickname}
-            score={user.score}
-          />
+          <Camera key={user.id} nickname={user.nickname} score={user.score} />
         ))}
 
         <div className="room__content">RoomCode - {room.id}</div>
