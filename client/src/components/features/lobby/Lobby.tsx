@@ -8,6 +8,9 @@ import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LobbySettingsType } from '../../../types/LobbySettings';
 
+import { roomCodeContext } from '../../../useContext/roomCodeContext';
+import { useContext } from 'react';
+
 export const Lobby = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
@@ -60,17 +63,26 @@ export const Lobby = () => {
 };
 
 const LobbyContent = () => {
+  const roomCode = useContext(roomCodeContext);
   const [ready, setReady] = useState(false);
   const [playersReady, setPlayersReady] = useState(0);
+
   const toggleReady = () => {
     setReady((prevReady) => !prevReady);
     setPlayersReady((prevPlayersReady) =>
       ready ? prevPlayersReady - 1 : prevPlayersReady + 1
     );
   };
+
+  const CopyRoomCode = () => {
+    navigator.clipboard.writeText(roomCode!);
+  };
+
   return (
     <>
-      <span className="lobby__title">Room Code: 12345</span>
+      <span className="lobby__title" onClick={CopyRoomCode}>
+        Room Code: {roomCode}
+      </span>
       <RowLayout justifyContent="center">
         <span className="lobby__players">{playersReady}</span>
         <span className="lobby__text">Players ready</span>

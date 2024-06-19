@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef, useContext } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Camera } from '../../components/features/camera/Camera';
 import { Lobby } from '../../components/features/lobby/Lobby';
 import './Room.scss';
@@ -44,9 +44,11 @@ export const RoomPage = () => {
         {users.map((user) => (
           <Camera key={user.id} nickname={user.nickname} score={user.score} />
         ))}
-        <div className="room__content">
-          <Lobby />
-        </div>
+        <roomCodeContext.Provider value={room.id}>
+          <div className="room__content">
+            <Lobby />
+          </div>
+        </roomCodeContext.Provider>
       </div>
     </div>
   );
