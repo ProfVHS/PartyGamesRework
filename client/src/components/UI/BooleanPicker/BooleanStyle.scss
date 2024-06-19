@@ -1,0 +1,28 @@
+.boolean-picker {
+  width: 100%;
+
+  border-radius: 4px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  color: rgba($color: #fff, $alpha: 0.6);
+
+  font-size: 24px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+
+  transition: 0.3s ease;
+  cursor: pointer;
+
+  &.enable {
+    background-color: #33c153;
+    box-shadow: 0 4px 0 0 darken($color: #33c153, $amount: 20);
+  }
+  &.disable {
+    background-color: #c81414;
+    box-shadow: 0 4px 0 0 darken($color: #c81414, $amount: 20);
+  }
+}
