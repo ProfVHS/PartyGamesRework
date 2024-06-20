@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
+import { getUsersLength } from '../../../Database/Users/getUsersLength';
 
 export const joinRoom = async (socket: Socket) => {
   socket.on('join_room', async (roomCode, nickname) => {
@@ -13,20 +14,7 @@ export const joinRoom = async (socket: Socket) => {
       return;
     }
 
-    const usersInRoom: number = await new Promise((resolve) => {
-      db.all(
-        `SELECT * FROM users WHERE room_id = ?`,
-        [roomCode],
-        (err, rows) => {
-          if (err) {
-            console.error('joinRoom.ts: Users Select');
-            console.error(err.message);
-          } else {
-            resolve(rows.length);
-          }
-        }
-      );
-    });
+    const usersInRoom: number = await getUsersLength(roomCode);
 
     if (usersInRoom >= 8) {
       socket.nsp.to(socket.id).emit('cannot_join', 'Room is full');
