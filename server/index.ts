@@ -17,6 +17,8 @@ const SOCKET_PORT = process.env.SOCKET_PORT || 3000;
 const socketServer = createServer(app);
 
 const io = new Server(socketServer, {
+  pingInterval: 5000, // Send a ping every 5 seconds
+  pingTimeout: 3000, // Wait 3 seconds for a response
   cors: {
     origin: '*',
     methods: ['GET', 'POST'],

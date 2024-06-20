@@ -5,6 +5,6 @@ import { disconnectUser } from './Sockets/disconnectUser';
 
 export const usersModule = (socket: Socket) => {
   sendUsersData(socket);
-  forceDisconnectUser(socket, socket.id);
-  disconnectUser(socket, socket.id);
+  forceDisconnectUser(socket);
+  disconnectUser(socket);
 };

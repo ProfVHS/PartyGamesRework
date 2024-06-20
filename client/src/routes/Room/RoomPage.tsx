@@ -38,6 +38,13 @@ export const RoomPage = () => {
     };
   }, [socket]);
 
+  useEffect(() => {
+    socket.on('disconnect', () => {
+      const date = new Date();
+      console.log('Disconnected from server', date);
+    });
+  }, []);
+
   return (
     <div className="room">
       <div className="room__grid">

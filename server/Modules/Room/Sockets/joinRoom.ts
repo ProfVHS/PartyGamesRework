@@ -23,8 +23,8 @@ export const joinRoom = async (socket: Socket) => {
 
     await new Promise(() => {
       db.run(
-        `INSERT INTO users (id, nickname, score, room_id) VALUES (?, ?, ?, ?)`,
-        [socket.id, nickname, 100, roomCode],
+        `INSERT INTO users (id, nickname, score, room_id, isHost) VALUES (?, ?, ?, ?, ?)`,
+        [socket.id, nickname, 100, roomCode, false],
         (err) => {
           if (err) {
             console.error('joinRoom.ts: Users Insert');

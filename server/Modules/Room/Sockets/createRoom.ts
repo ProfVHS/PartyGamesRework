@@ -19,8 +19,8 @@ export const createRoom = async (socket: Socket) => {
         }
       });
       db.run(
-        `INSERT INTO users (id, nickname, score, room_id) VALUES (?, ?, ?, ?)`,
-        [socket.id, nickname, 100, roomCode],
+        `INSERT INTO users (id, nickname, score, room_id, isHost) VALUES (?, ?, ?, ?, ?)`,
+        [socket.id, nickname, 100, roomCode, true],
         (err) => {
           if (err) {
             console.error('createRoom.ts: Users Insert');
