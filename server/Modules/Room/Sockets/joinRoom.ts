@@ -21,7 +21,7 @@ export const joinRoom = async (socket: Socket) => {
       return;
     }
 
-    await new Promise(() => {
+    await new Promise<void>(() => {
       db.run(
         `INSERT INTO users (id, nickname, score, room_id, isHost) VALUES (?, ?, ?, ?, ?)`,
         [socket.id, nickname, 100, roomCode, false],
