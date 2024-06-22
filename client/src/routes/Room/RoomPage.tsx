@@ -5,8 +5,10 @@ import './Room.scss';
 import { socket } from '../../socket';
 import { userType } from '../../Types/userType';
 import { roomCodeContext } from '../../useContext/roomCodeContext';
+import { useNavigate } from 'react-router-dom';
 
 export const RoomPage = () => {
+  const navigator = useNavigate();
   const [users, setUsers] = useState<userType[]>([]);
   const [room, setRoom] = useState<roomType>({ id: '' });
 
@@ -32,17 +34,27 @@ export const RoomPage = () => {
       setRoom(() => data);
     });
 
-    return () => {
-      socket.off('update_users');
-      socket.off('update_room');
-    };
-  }, [socket]);
+    socket.on('back_to_lobby', () => {
+      navigator('/');
+    });
 
-  useEffect(() => {
     socket.on('disconnect', () => {
       const date = new Date();
       console.log('Disconnected from server', date);
     });
+
+    return () => {
+      socket.off('update_users');
+      socket.off('update_room');
+      socket.off('back_to_lobby');
+      socket.off('disconnect');
+    };
+  }, [socket]);
+
+  useEffect(() => {
+    if (users.length === 0 || room.id === '') {
+      socket.emit('check_user_in_room');
+    }
   }, []);
 
   return (
