@@ -3,4 +3,5 @@ export type userType = {
   nickname: string;
   score: number;
   room_id: string;
+  isHost: boolean;
 };
