@@ -76,8 +76,6 @@ const LobbyContent = () => {
 
     const readyValue = ready ? -1 : 1;
 
-    console.log(readyValue);
-
     socket.emit('toggle_ready', roomData, readyValue);
   };
 

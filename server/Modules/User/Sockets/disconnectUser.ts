@@ -2,11 +2,11 @@ import { Socket } from 'socket.io';
 import { userType } from '../../../Types/userType';
 
 import { getUserData } from '../../../Database/Users/getUserData';
-import { getUsersData } from '../../../Database/Users/getUsersData';
 
 import { deleteRoom } from '../../Room/Functions/deleteRoom';
 import { deleteUsers } from '../Functions/deleteUsers';
 import { deleteUser } from '../Functions/deleteUser';
+import { sendUsersData } from '../Functions/sendUsersData';
 
 export const disconnectUser = async (socket: Socket) => {
   socket.on('disconnect', async () => {
@@ -20,9 +20,7 @@ export const disconnectUser = async (socket: Socket) => {
       console.log('Host wyszedł');
     } else {
       deleteUser(user.id);
-      getUsersData(user.room_id).then((users) => {
-        socket.nsp.to(user.room_id).emit('update_users', users);
-      });
+      sendUsersData(socket, user.room_id);
     }
     console.log('User Disconnected', user.nickname);
   });
