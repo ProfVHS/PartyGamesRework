@@ -12,12 +12,16 @@ export const createRoom = async (socket: Socket) => {
     }
 
     await new Promise<void>(async (resolve) => {
-      db.run(`INSERT INTO rooms (id) VALUES (?)`, [roomCode], (err) => {
-        if (err) {
-          console.error('createRoom.ts: Room Insert');
-          console.error(err.message);
+      db.run(
+        `INSERT INTO rooms (id, round, players_ready) VALUES (?, 0, 0)`,
+        [roomCode],
+        (err) => {
+          if (err) {
+            console.error('createRoom.ts: Room Insert');
+            console.error(err.message);
+          }
         }
-      });
+      );
       db.run(
         `INSERT INTO users (id, nickname, score, room_id, isHost) VALUES (?, ?, ?, ?, ?)`,
         [socket.id, nickname, 100, roomCode, true],

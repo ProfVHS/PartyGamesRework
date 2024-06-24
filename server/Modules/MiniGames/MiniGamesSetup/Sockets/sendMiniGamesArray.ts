@@ -19,7 +19,7 @@ export const sendMiniGamesArray = (socket: Socket) => {
       // Randomly generate miniGamesArray
       const miniGames = generateMiniGamesArray(miniGamesArrayLength);
 
-      socket.nsp.to(roomCode).emit('update_miniGamesArray', miniGamesArray);
+      socket.nsp.to(roomCode).emit('update_miniGamesArray', miniGames);
     }
   );
 };

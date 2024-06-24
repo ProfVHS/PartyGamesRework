@@ -4,13 +4,13 @@ import { Lobby } from '../../components/features/lobby/Lobby';
 import './Room.scss';
 import { socket } from '../../socket';
 import { userType } from '../../Types/userType';
-import { roomCodeContext } from '../../useContext/roomCodeContext';
+import { roomDataContext } from '../../useContext/roomDataContext';
 import { useNavigate } from 'react-router-dom';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
   const [users, setUsers] = useState<userType[]>([]);
-  const [room, setRoom] = useState<roomType>({ id: '' });
+  const [room, setRoom] = useState<roomType>();
 
   const onceDone = useRef(false);
 
@@ -52,7 +52,7 @@ export const RoomPage = () => {
   }, [socket]);
 
   useEffect(() => {
-    if (users.length === 0 || room.id === '') {
+    if (users.length === 0 || room === null) {
       socket.emit('check_user_in_room');
     }
   }, []);
@@ -63,11 +63,11 @@ export const RoomPage = () => {
         {users.map((user) => (
           <Camera key={user.id} nickname={user.nickname} score={user.score} />
         ))}
-        <roomCodeContext.Provider value={room.id}>
+        <roomDataContext.Provider value={room}>
           <div className="room__content">
             <Lobby />
           </div>
-        </roomCodeContext.Provider>
+        </roomDataContext.Provider>
       </div>
     </div>
   );

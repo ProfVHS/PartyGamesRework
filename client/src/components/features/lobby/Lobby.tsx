@@ -8,7 +8,7 @@ import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 import { AnimatePresence, motion } from 'framer-motion';
 import { LobbySettingsType } from '../../../types/LobbySettings';
 
-import { roomCodeContext } from '../../../useContext/roomCodeContext';
+import { roomDataContext } from '../../../useContext/roomDataContext';
 import { useContext } from 'react';
 import { socket } from '../../../socket';
 
@@ -64,30 +64,34 @@ export const Lobby = () => {
 };
 
 const LobbyContent = () => {
-  const roomCode = useContext(roomCodeContext);
+  const roomData: roomType | null = useContext(roomDataContext)!;
   const [ready, setReady] = useState(false);
-  const [playersReady, setPlayersReady] = useState(0);
+
+  if (!roomData) {
+    return <></>;
+  }
 
   const toggleReady = () => {
     setReady((prevReady) => !prevReady);
-    setPlayersReady((prevPlayersReady) =>
-      ready ? prevPlayersReady - 1 : prevPlayersReady + 1
-    );
-    console.log('create_miniGamesArray');
-    socket.emit('create_miniGamesArray', roomCode, ['CTB', 'Cards'], 8);
+
+    const readyValue = ready ? -1 : 1;
+
+    console.log(readyValue);
+
+    socket.emit('toggle_ready', roomData, readyValue);
   };
 
   const CopyRoomCode = () => {
-    navigator.clipboard.writeText(roomCode!);
+    navigator.clipboard.writeText(roomData.id);
   };
 
   return (
     <>
       <span className="lobby__title" onClick={CopyRoomCode}>
-        Room Code: {roomCode}
+        Room Code: {roomData.id}
       </span>
       <RowLayout justifyContent="center">
-        <span className="lobby__players">{playersReady}</span>
+        <span className="lobby__players">{roomData.players_ready}</span>
         <span className="lobby__text">Players ready</span>
       </RowLayout>
       <Button style={{ width: '75%' }} onClick={toggleReady}>
