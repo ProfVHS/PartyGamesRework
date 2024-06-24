@@ -27,11 +27,13 @@ const io = new Server(socketServer, {
 
 import { roomModule } from './Modules/Room/roomModule';
 import { usersModule } from './Modules/User/usersModule';
+import { miniGamesModule } from './Modules/MiniGames/minigamesModule';
 
 const handleModulesOnConnection = async (socket: Socket) => {
   console.log('New connection', socket.id);
   roomModule(socket);
   usersModule(socket);
+  miniGamesModule(socket);
 };
 
 io.on('connection', handleModulesOnConnection);

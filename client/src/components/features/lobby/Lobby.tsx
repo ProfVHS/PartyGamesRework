@@ -10,6 +10,7 @@ import { LobbySettingsType } from '../../../types/LobbySettings';
 
 import { roomCodeContext } from '../../../useContext/roomCodeContext';
 import { useContext } from 'react';
+import { socket } from '../../../socket';
 
 export const Lobby = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -72,6 +73,8 @@ const LobbyContent = () => {
     setPlayersReady((prevPlayersReady) =>
       ready ? prevPlayersReady - 1 : prevPlayersReady + 1
     );
+    console.log('create_miniGamesArray');
+    socket.emit('create_miniGamesArray', roomCode, ['CTB', 'Cards'], 8);
   };
 
   const CopyRoomCode = () => {
