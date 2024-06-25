@@ -1,6 +1,4 @@
-import { Minigame } from './Minigame';
-
-export type LobbySettingsType = {
+type LobbySettingsType = {
   isRandomMinigames: boolean;
   isTutorialsEnabled: boolean;
   numberOfMinigames?: number;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { RowLayout } from '../../layouts/RowLayout';
 import { Button } from '../../UI/Button/Button';
 import { NumberPicker } from '../../UI/NumberPicker/NumberPicker';
@@ -6,11 +6,8 @@ import './LobbySettingsStyle.scss';
 import { Modal } from '../../UI/Modal/Modal';
 import { MinigamesList } from '../minigamesList/MinigamesList';
 import { AnimatePresence } from 'framer-motion';
-import { Minigame } from '../../../types/Minigame';
 import { Switch } from '../../UI/Switch/Switch';
-import { LobbySettingsType } from '../../../types/LobbySettings';
 import { Alert } from '../../UI/Alert/Alert';
-import { AlertType } from '../../../types/AlertType';
 
 type LobbySettingsProps = {
   onCancel: () => void;
@@ -44,6 +41,10 @@ export const LobbySettings = ({
     setLobbySettings(newSettings);
     onCancel();
   };
+
+  useEffect(() => {
+    console.log(newSettings);
+  }, [newSettings]);
 
   return (
     <div className="lobby-settings">

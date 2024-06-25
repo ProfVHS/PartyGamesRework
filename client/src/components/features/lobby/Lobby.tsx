@@ -6,9 +6,9 @@ import { LobbySettings } from '../lobbysettings/LobbySettings';
 import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { LobbySettingsType } from '../../../types/LobbySettings';
 
 import { roomDataContext } from '../../../useContext/roomDataContext';
+import { usersDataContext } from '../../../useContext/usersDataContext';
 import { useContext } from 'react';
 import { socket } from '../../../socket';
 
@@ -20,6 +20,9 @@ export const Lobby = () => {
     isTutorialsEnabled: true,
     minigames: [],
   });
+
+  const users = useContext(usersDataContext);
+  const isHost = users?.find((user) => user.isHost)?.id === socket.id;
 
   const toggleLobbySettings = () => setIsSettingsOpen((prev) => !prev);
   return (
@@ -51,10 +54,12 @@ export const Lobby = () => {
               transition={{ delay: 0.2, duration: 0.2 }}
             >
               <LobbyContent />
-              <SettingsButton
-                className="lobby__settingsbutton"
-                onClick={() => toggleLobbySettings()}
-              />
+              {isHost && (
+                <SettingsButton
+                  className="lobby__settingsbutton"
+                  onClick={() => toggleLobbySettings()}
+                />
+              )}
             </motion.div>
           )}
         </AnimatePresence>

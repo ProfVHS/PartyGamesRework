@@ -1,4 +1,4 @@
-export type Minigame = {
+type Minigame = {
   id?: number;
   minigameID: string;
   name: string;

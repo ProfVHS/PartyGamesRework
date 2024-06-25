@@ -3,9 +3,9 @@ import { Camera } from '../../components/features/camera/Camera';
 import { Lobby } from '../../components/features/lobby/Lobby';
 import './Room.scss';
 import { socket } from '../../socket';
-import { userType } from '../../Types/userType';
-import { roomDataContext } from '../../useContext/roomDataContext';
 import { useNavigate } from 'react-router-dom';
+import { roomDataContext } from '../../useContext/roomDataContext';
+import { usersDataContext } from '../../useContext/usersDataContext';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
@@ -64,9 +64,11 @@ export const RoomPage = () => {
           <Camera key={user.id} nickname={user.nickname} score={user.score} />
         ))}
         <roomDataContext.Provider value={room}>
-          <div className="room__content">
-            <Lobby />
-          </div>
+          <usersDataContext.Provider value={users}>
+            <div className="room__content">
+              <Lobby />
+            </div>
+          </usersDataContext.Provider>
         </roomDataContext.Provider>
       </div>
     </div>
