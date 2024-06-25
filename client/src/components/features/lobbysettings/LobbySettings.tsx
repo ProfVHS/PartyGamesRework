@@ -8,6 +8,9 @@ import { MinigamesList } from '../minigamesList/MinigamesList';
 import { AnimatePresence } from 'framer-motion';
 import { Switch } from '../../UI/Switch/Switch';
 import { Alert } from '../../UI/Alert/Alert';
+import { socket } from '../../../socket';
+import { roomDataContext } from '../../../useContext/roomDataContext';
+import { useContext } from 'react';
 
 type LobbySettingsProps = {
   onCancel: () => void;
@@ -22,6 +25,7 @@ export const LobbySettings = ({
 }: LobbySettingsProps) => {
   const [minigamesModal, setMinigamesModal] = useState(false);
   const [showAlert, setShowAlert] = useState<AlertType | null>(null);
+  const roomData = useContext(roomDataContext);
 
   const [newSettings, setNewSettings] =
     useState<LobbySettingsType>(lobbySettings);
@@ -37,6 +41,13 @@ export const LobbySettings = ({
         return;
       }
     }
+
+    socket.emit(
+      'create_miniGamesArray',
+      roomData!.id,
+      newSettings.minigames,
+      newSettings.numberOfMinigames || 2
+    );
     setShowAlert(null);
     setLobbySettings(newSettings);
     onCancel();

@@ -53,7 +53,7 @@ export const Lobby = () => {
               transition={{ delay: 0.2, duration: 0.2 }}
             >
               <LobbyContent />
-              {client?.isHost && (
+              {client?.isHost == true && (
                 <SettingsButton
                   className="lobby__settingsbutton"
                   onClick={() => toggleLobbySettings()}

@@ -13,6 +13,7 @@ export const RoomPage = () => {
   const [room, setRoom] = useState<roomType>();
   const [users, setUsers] = useState<userType[]>([]);
   const [client, setClient] = useState<userType>();
+  const [minigames, setMinigames] = useState<Minigame[]>([]);
 
   const onceDone = useRef(false);
 
@@ -38,6 +39,11 @@ export const RoomPage = () => {
       setRoom(() => data);
     });
 
+    socket.on('update_miniGamesArray', (data: Minigame[]) => {
+      console.log('Minigames updated', data);
+      setMinigames(() => data);
+    });
+
     socket.on('back_to_lobby', () => {
       navigator('/');
     });
@@ -50,13 +56,21 @@ export const RoomPage = () => {
     return () => {
       socket.off('update_users');
       socket.off('update_room');
+      socket.off('update_miniGamesArray');
       socket.off('back_to_lobby');
       socket.off('disconnect');
     };
   }, [socket]);
 
   useEffect(() => {
-    console.log('Players ready: ', room?.players_ready);
+    if (room?.players_ready === users.length && users.length > 1) {
+      if (!client?.isHost) return;
+
+      if (minigames.length == 0)
+        socket.emit('create_miniGamesArray', room.id, [], 2);
+
+      console.log('All players ready');
+    }
   }, [room?.players_ready]);
 
   useEffect(() => {
