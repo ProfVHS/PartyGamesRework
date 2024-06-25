@@ -6,11 +6,13 @@ import { socket } from '../../socket';
 import { useNavigate } from 'react-router-dom';
 import { roomDataContext } from '../../useContext/roomDataContext';
 import { usersDataContext } from '../../useContext/usersDataContext';
+import { clientDataContext } from '../../useContext/clientDataContext';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
-  const [users, setUsers] = useState<userType[]>([]);
   const [room, setRoom] = useState<roomType>();
+  const [users, setUsers] = useState<userType[]>([]);
+  const [client, setClient] = useState<userType>();
 
   const onceDone = useRef(false);
 
@@ -27,6 +29,8 @@ export const RoomPage = () => {
     socket.on('update_users', (data: userType[]) => {
       console.log('Users Updated', data);
       setUsers(() => data);
+      const clientData = data.find((user) => user.id === socket.id);
+      setClient(() => clientData);
     });
 
     socket.on('update_room', (data: roomType) => {
@@ -52,6 +56,10 @@ export const RoomPage = () => {
   }, [socket]);
 
   useEffect(() => {
+    console.log('Players ready: ', room?.players_ready);
+  }, [room?.players_ready]);
+
+  useEffect(() => {
     if (users.length === 0 || room === null) {
       socket.emit('check_user_in_room');
     }
@@ -65,9 +73,11 @@ export const RoomPage = () => {
         ))}
         <roomDataContext.Provider value={room}>
           <usersDataContext.Provider value={users}>
-            <div className="room__content">
-              <Lobby />
-            </div>
+            <clientDataContext.Provider value={client}>
+              <div className="room__content">
+                <Lobby />
+              </div>
+            </clientDataContext.Provider>
           </usersDataContext.Provider>
         </roomDataContext.Provider>
       </div>
