@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { roomDataContext } from '../../useContext/roomDataContext';
 import { usersDataContext } from '../../useContext/usersDataContext';
 import { clientDataContext } from '../../useContext/clientDataContext';
+import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
+import { Minigames } from '../Minigames/Minigames';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
@@ -14,6 +16,7 @@ export const RoomPage = () => {
   const [users, setUsers] = useState<userType[]>([]);
   const [client, setClient] = useState<userType>();
   const [minigames, setMinigames] = useState<Minigame[]>([]);
+  const [startMinigames, setStartMinigames] = useState<boolean>(false);
 
   const onceDone = useRef(false);
 
@@ -64,12 +67,12 @@ export const RoomPage = () => {
 
   useEffect(() => {
     if (room?.players_ready === users.length && users.length > 1) {
+      setStartMinigames(() => true);
+
       if (!client?.isHost) return;
 
       if (minigames.length == 0)
         socket.emit('create_miniGamesArray', room.id, [], 2);
-
-      console.log('All players ready');
     }
   }, [room?.players_ready]);
 
@@ -88,9 +91,11 @@ export const RoomPage = () => {
         <roomDataContext.Provider value={room}>
           <usersDataContext.Provider value={users}>
             <clientDataContext.Provider value={client}>
-              <div className="room__content">
-                <Lobby />
-              </div>
+              <minigamesArrayContext.Provider value={minigames}>
+                <div className="room__content">
+                  {startMinigames ? <Minigames /> : <Lobby />}
+                </div>
+              </minigamesArrayContext.Provider>
             </clientDataContext.Provider>
           </usersDataContext.Provider>
         </roomDataContext.Provider>
