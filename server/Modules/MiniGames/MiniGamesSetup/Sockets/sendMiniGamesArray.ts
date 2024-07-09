@@ -9,7 +9,6 @@ export const sendMiniGamesArray = (socket: Socket) => {
       miniGamesArray: string[],
       miniGamesArrayLength: number
     ) => {
-      console.log('Create array');
       // MiniGamesArray selected by the host
       if (miniGamesArray.length > 0) {
         socket.nsp.to(roomCode).emit('receive_minigamesArray', miniGamesArray);
