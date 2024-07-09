@@ -8,7 +8,7 @@ import { roomDataContext } from '../../useContext/roomDataContext';
 import { usersDataContext } from '../../useContext/usersDataContext';
 import { clientDataContext } from '../../useContext/clientDataContext';
 import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
-import { Minigames } from '../Minigames/Minigames';
+import { Minigame } from '../../components/Minigame/Minigame';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
@@ -42,7 +42,7 @@ export const RoomPage = () => {
       setRoom(() => data);
     });
 
-    socket.on('update_miniGamesArray', (data: Minigame[]) => {
+    socket.on('receive_minigamesArray', (data: Minigame[]) => {
       console.log('Minigames updated', data);
       setMinigames(() => data);
     });
@@ -59,7 +59,7 @@ export const RoomPage = () => {
     return () => {
       socket.off('update_users');
       socket.off('update_room');
-      socket.off('update_miniGamesArray');
+      socket.off('receive_minigamesArray');
       socket.off('back_to_lobby');
       socket.off('disconnect');
     };
@@ -93,7 +93,7 @@ export const RoomPage = () => {
             <clientDataContext.Provider value={client}>
               <minigamesArrayContext.Provider value={minigames}>
                 <div className="room__content">
-                  {startMinigames ? <Minigames /> : <Lobby />}
+                  {startMinigames ? <Minigame /> : <Lobby />}
                 </div>
               </minigamesArrayContext.Provider>
             </clientDataContext.Provider>

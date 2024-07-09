@@ -13,7 +13,7 @@ export const createDatabaseTables = () => {
       `CREATE TABLE users ( 'id' VARCHAR(20) PRIMARY KEY, 'nickname' VARCHAR(16) NOT NULL, 'score' INTEGER NOT NULL, 'room_id' VARCHAR(5) NOT NULL, 'isHost' BOOLEAN NOT NULL, FOREIGN KEY (room_id) REFERENCES rooms(id))`
     );
     db.run(
-      `CREATE TABLE rooms (  'id' VARCHAR(5) PRIMARY KEY, 'round' INTEGER NOT NULL, 'players_ready' INTEGER NOT NULL)`
+      `CREATE TABLE rooms (  'id' VARCHAR(5) PRIMARY KEY, 'round' INTEGER NOT NULL, 'players_ready' INTEGER NOT NULL, 'current_minigame' INTEGER NOT NULL)`
     );
   });
 };
