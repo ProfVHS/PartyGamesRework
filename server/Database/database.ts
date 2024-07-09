@@ -15,5 +15,8 @@ export const createDatabaseTables = () => {
     db.run(
       `CREATE TABLE rooms (  'id' VARCHAR(5) PRIMARY KEY, 'round' INTEGER NOT NULL, 'players_ready' INTEGER NOT NULL, 'current_minigame' INTEGER NOT NULL)`
     );
+    db.run(
+      `CREATE TABLE click_the_bomb ( 'id' VARCHAR(5) PRIMARY KEY, 'counter' INTEGER NOT NULL, 'max' INTEGER NOT NULL, FOREIGN KEY (id) REFERENCES rooms(id))`
+    );
   });
 };
