@@ -93,7 +93,12 @@ export const RoomPage = () => {
             <clientDataContext.Provider value={client}>
               <minigamesArrayContext.Provider value={minigames}>
                 <div className="room__content">
-                  {startMinigames ? <Minigame /> : <Lobby />}
+                  {startMinigames &&
+                  (minigames.length > 1 || !client!.isHost) ? (
+                    <Minigame />
+                  ) : (
+                    <Lobby />
+                  )}
                 </div>
               </minigamesArrayContext.Provider>
             </clientDataContext.Provider>

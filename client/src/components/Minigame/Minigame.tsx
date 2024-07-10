@@ -9,9 +9,7 @@ import { ClickTheBomb } from '../Minigames/ClickTheBomb/ClickTheBomb';
 export const Minigame = () => {
   const client = useContext(clientDataContext);
   const room = useContext(roomDataContext);
-  const [minigamesArray, setMinigameArray] = useState<Minigame[] | undefined>(
-    useContext(minigamesArrayContext)
-  );
+  const minigamesArray = useContext(minigamesArrayContext);
   const [currentMinigame, setCurrentMinigame] = useState<Minigame>({
     id: 0,
     minigameID: '',
@@ -27,15 +25,9 @@ export const Minigame = () => {
     socket.emit('update_currentMinigame', room!.id, minigamesArray![0]);
 
     onceDone.current = true;
-  }, []);
+  }, [minigamesArray]);
 
   useEffect(() => {
-    socket.on('receive_minigamesArray', (data: Minigame[]) => {
-      if (minigamesArray!.length > 0) return;
-      console.log('Minigames updated', data);
-      setMinigameArray(() => data);
-    });
-
     socket.on('update_currentMinigame', (data: Minigame) => {
       console.log('Current Minigame updated', data);
       setCurrentMinigame(() => data);
@@ -47,14 +39,10 @@ export const Minigame = () => {
     });
 
     return () => {
-      socket.off('receive_minigamesArray');
       socket.off('update_currentMinigame');
+      socket.off('receive_currentMinigame');
     };
   }, [socket]);
-
-  useEffect(() => {
-    console.log(minigamesArray);
-  }, [minigamesArray]);
 
   return (
     <div>
