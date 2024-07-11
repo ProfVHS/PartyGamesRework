@@ -2,6 +2,7 @@ import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
 import { getUsersLength } from '../../../Database/Users/getUsersLength';
+import { createUser } from '../../User/Functions/createUser';
 
 export const joinRoom = async (socket: Socket) => {
   socket.on('join_room', async (roomCode, nickname) => {
@@ -21,21 +22,14 @@ export const joinRoom = async (socket: Socket) => {
       return;
     }
 
-    await new Promise<void>(() => {
-      db.run(
-        `INSERT INTO users (id, nickname, score, room_id, isHost) VALUES (?, ?, ?, ?, ?)`,
-        [socket.id, nickname, 100, roomCode, false],
-        (err) => {
-          if (err) {
-            console.error('joinRoom.ts: Users Insert');
-            console.error(err.message);
-          }
-        }
-      );
+    await new Promise<void>(async (resolve) => {
+      await createUser(socket.id, nickname, 100, roomCode, true, 0);
 
       socket.join(roomCode);
 
       socket.nsp.to(socket.id).emit('can_join');
+
+      resolve();
     });
   });
 };

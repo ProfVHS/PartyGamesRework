@@ -22,10 +22,11 @@ export const Minigame = () => {
     if (onceDone.current) return;
     if (!client!.isHost) return;
 
+    socket.emit('update_users_position_in_room', room!.id);
     socket.emit('update_currentMinigame', room!.id, minigamesArray![0]);
 
     onceDone.current = true;
-  }, [minigamesArray]);
+  }, []);
 
   useEffect(() => {
     socket.on('update_currentMinigame', (data: Minigame) => {
@@ -46,8 +47,8 @@ export const Minigame = () => {
 
   return (
     <div>
-      {currentMinigame!.minigameID === 'CTB' && <ClickTheBomb />}
-      {currentMinigame!.minigameID === 'CARDS' && <div>Cards</div>}
+      {/* {currentMinigame!.minigameID === 'CTB' && <ClickTheBomb />}
+      {currentMinigame!.minigameID === 'CARDS' && <div>Cards</div>} */}
     </div>
   );
 };
