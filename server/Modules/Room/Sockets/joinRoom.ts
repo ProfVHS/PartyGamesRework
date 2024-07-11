@@ -23,7 +23,7 @@ export const joinRoom = async (socket: Socket) => {
     }
 
     await new Promise<void>(async (resolve) => {
-      await createUser(socket.id, nickname, 100, roomCode, true, 0);
+      await createUser(socket.id, nickname, roomCode, false);
 
       socket.join(roomCode);
 

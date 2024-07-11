@@ -13,7 +13,7 @@ export const createRoom = async (socket: Socket) => {
     }
 
     await new Promise<void>(async (resolve) => {
-      await createUser(socket.id, nickname, 100, roomCode, true, 1);
+      await createUser(socket.id, nickname, roomCode, true);
 
       db.run(
         `INSERT INTO rooms (id, round, players_ready, current_minigame) VALUES (?, 0, 0, 0)`,

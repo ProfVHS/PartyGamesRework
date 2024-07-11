@@ -10,7 +10,7 @@ export const db = new sqlite3.Database(':memory:', (err) => {
 export const createDatabaseTables = () => {
   db.serialize(() => {
     db.run(
-      `CREATE TABLE users ( 'id' VARCHAR(20) PRIMARY KEY, 'nickname' VARCHAR(16) NOT NULL, 'score' INTEGER NOT NULL, 'room_id' VARCHAR(5) NOT NULL, 'isHost' BOOLEAN NOT NULL, 'position_in_room' INTEGER NOT NULL, FOREIGN KEY (room_id) REFERENCES rooms(id))`
+      `CREATE TABLE users ( 'id' VARCHAR(20) PRIMARY KEY, 'nickname' VARCHAR(16) NOT NULL, 'score' INTEGER NOT NULL, 'room_id' VARCHAR(5) NOT NULL, 'isHost' BOOLEAN NOT NULL, 'position_in_room' INTEGER NOT NULL, 'alive' BOOLEAN NOT NULL, 'isDisconnected' BOOLEAN NOT NULL, FOREIGN KEY (room_id) REFERENCES rooms(id))`
     );
     db.run(
       `CREATE TABLE rooms (  'id' VARCHAR(5) PRIMARY KEY, 'round' INTEGER NOT NULL, 'players_ready' INTEGER NOT NULL, 'current_minigame' INTEGER NOT NULL)`
