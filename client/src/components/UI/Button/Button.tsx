@@ -2,6 +2,7 @@ import React from 'react';
 import './ButtonStyle.scss';
 
 type ButtonProps = {
+  className: string;
   onClick?: () => void;
   children: React.ReactNode;
   style?: React.CSSProperties;
@@ -13,6 +14,7 @@ type ButtonProps = {
 
 export const Button = ({
   children,
+  className,
   onClick,
   style,
   type,
@@ -24,7 +26,7 @@ export const Button = ({
     <button
       className={`button button${
         variant ? '--' + variant : '--square'
-      } button--${color ?? 'primary'}Color button--${size ?? 'medium'}Size`}
+      } button--${color ?? 'primary'}Color button--${size ?? 'medium'}Size ${className}`}
       type={type}
       style={style}
       onClick={onClick}
