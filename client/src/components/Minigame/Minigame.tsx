@@ -47,8 +47,8 @@ export const Minigame = () => {
 
   return (
     <div>
-      {/* {currentMinigame!.minigameID === 'CTB' && <ClickTheBomb />}
-      {currentMinigame!.minigameID === 'CARDS' && <div>Cards</div>} */}
+      {currentMinigame!.minigameID === 'CTB' && <ClickTheBomb />}
+      {currentMinigame!.minigameID === 'CARDS' && <ClickTheBomb />}
     </div>
   );
 };

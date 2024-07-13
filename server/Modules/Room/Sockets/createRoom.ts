@@ -16,7 +16,7 @@ export const createRoom = async (socket: Socket) => {
       await createUser(socket.id, nickname, roomCode, true);
 
       db.run(
-        `INSERT INTO rooms (id, round, players_ready, current_minigame) VALUES (?, 0, 0, 0)`,
+        `INSERT INTO rooms (id, round, players_ready, current_minigame, turn) VALUES (?, 0, 0, 0, 1)`,
         [roomCode],
         (err) => {
           if (err) {
