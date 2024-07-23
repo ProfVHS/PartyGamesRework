@@ -54,11 +54,24 @@
     &:active {
       box-shadow: 0 2px 0 0 darken($primaryColor, 30%);
     }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: translateY(1px);
+      box-shadow: 0 2px 0 0 darken($primaryColor, 30%);
+    }
   }
   &--removeColor {
     background-color: #c81414;
     box-shadow: 0 4px 0 0 darken(#c81414, 20%);
     &:active {
+      box-shadow: 0 2px 0 0 darken($primaryColor, 30%);
+    }
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+      transform: translateY(1px);
       box-shadow: 0 2px 0 0 darken($primaryColor, 30%);
     }
   }

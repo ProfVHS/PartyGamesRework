@@ -10,6 +10,7 @@ type ButtonProps = {
   variant?: 'square' | 'round';
   color?: 'primary' | 'remove';
   size?: 'small' | 'medium' | 'large';
+  isDisabled?: boolean;
 };
 
 export const Button = ({
@@ -17,19 +18,25 @@ export const Button = ({
   className,
   onClick,
   style,
-  type,
-  variant,
-  color,
-  size,
+  type = 'button',
+  variant = 'square',
+  color = 'primary',
+  size = 'medium',
+  isDisabled = false,
 }: ButtonProps) => {
   return (
     <button
-      className={`button button${
-        variant ? '--' + variant : '--square'
-      } button--${color ?? 'primary'}Color button--${size ?? 'medium'}Size ${className}`}
+      className={[
+        `button`,
+        `button--${variant}`,
+        `button--${color}Color`,
+        `button--${size}Size`,
+        `${className}`,
+      ].join(' ')}
       type={type}
       style={style}
       onClick={onClick}
+      disabled={isDisabled}
     >
       {children}
     </button>
