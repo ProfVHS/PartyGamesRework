@@ -1,3 +1,4 @@
+@import '../../../sassStyles/variables.scss';
 .clickthebomb {
   position: relative;
   display: flex;
@@ -13,10 +14,12 @@
   max-width: 400px;
   min-width: 320px;
 
-  background-color: #f5f5f5;
+  background-color: #fff;
   border-radius: 4px;
 
   box-shadow: 0 4px 0 0 rgba(0, 0, 0, 0.2);
+
+  user-select: none;
 
   &__info {
     display: flex;
@@ -26,16 +29,25 @@
   }
 
   &__title {
+    color: $secondaryColor;
     font-family: 'Spicy Rice';
     font-size: 32px;
   }
 
   &__turn {
+    font-family: 'Poppins';
+    font-weight: 500;
     font-size: 16px;
   }
 
   &__bomb {
     position: relative;
+
+    cursor: pointer;
+    transition: 0.05s ease-in-out;
+    &:active {
+      transform: scale(0.95);
+    }
   }
 
   &__counter {
@@ -51,6 +63,8 @@
     font-size: 32px;
 
     color: #fff;
+
+    user-select: none;
   }
 
   &__button {

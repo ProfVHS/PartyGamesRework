@@ -10,19 +10,17 @@ export const ClickTheBomb = () => {
         <span className="clickthebomb__title">Click The Bomb</span>
         <span className="clickthebomb__turn">Ultra Mango Guy Turn</span>
       </div>
-      <div className="clickthebomb__bomb">
+      <div
+        className="clickthebomb__bomb"
+        onClick={() => setCounter((prevCounter) => prevCounter + 1)}
+      >
         <Bomb />
         <span className="clickthebomb__counter">
           {counter >= 10 ? counter : '0' + counter}
         </span>
       </div>
-      <Button
-        className="clickthebomb__button"
-        type="button"
-        size="large"
-        onClick={() => setCounter((prevCounter) => prevCounter + 1)}
-      >
-        Click
+      <Button className="clickthebomb__button" type="button" size="medium">
+        Next
       </Button>
     </div>
   );
