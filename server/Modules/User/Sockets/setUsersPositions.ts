@@ -31,6 +31,20 @@ export const setUsersPositions = (socket: Socket) => {
           resolve();
         }
       );
+    }).then(() => {
+      db.all(
+        `SELECT * FROM users WHERE room_id = ?`,
+        [roomCode],
+        (err, users) => {
+          if (err) {
+            console.error('setUsersPositions.ts SELECT');
+            console.error(err.message);
+            return;
+          }
+
+          console.log('Users positions updated', users);
+        }
+      );
     });
   });
 };

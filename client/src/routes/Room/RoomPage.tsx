@@ -71,6 +71,8 @@ export const RoomPage = () => {
 
       if (!client?.isHost) return;
 
+      socket.emit('update_users_position_in_room', room!.id);
+
       if (minigames.length == 0)
         socket.emit('create_miniGamesArray', room.id, [], 2);
     }
