@@ -41,8 +41,6 @@ export const setUsersPositions = (socket: Socket) => {
             console.error(err.message);
             return;
           }
-
-          console.log('Users positions updated', users);
         }
       );
     });

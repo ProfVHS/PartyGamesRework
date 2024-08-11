@@ -37,15 +37,8 @@ export const ClickTheBomb = () => {
       setBomb(() => data);
     });
 
-    socket.on('update_turn', (data: number) => {
-      console.log(users);
+    socket.on('update_turn', (data: userType) => {
       console.log('Turn updated', data);
-
-      // const userTurn = users?.filter(
-      //   (user) => user.position_in_room === data
-      // )[0];
-
-      // console.log('Turn updated', userTurn?.nickname);
     });
 
     return () => {

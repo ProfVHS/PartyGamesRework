@@ -27,7 +27,6 @@ const changeTurn = async (usersLength: number, turn: number) => {
   if (turn > usersLength) {
     changeTurn(usersLength, 1);
   } else {
-    console.log('changeTurn', turn);
     await new Promise<number>((resolve, reject) => {
       db.get(
         'SELECT * FROM users WHERE position_in_room = ?',
