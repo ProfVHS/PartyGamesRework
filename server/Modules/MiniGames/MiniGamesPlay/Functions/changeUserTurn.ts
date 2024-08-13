@@ -1,8 +1,11 @@
 import { db } from '../../../../Database/database';
-import { getUsersLength } from '../../../../Database/Users/getUsersLength';
+import { Socket } from 'socket.io';
 import { userType } from '../../../../Types/userType';
+import { getUsersLength } from '../../../../Database/Users/getUsersLength';
+import { getRoomData } from '../../../../Database/Room/getRoomData';
+import { getUsersData } from '../../../../Database/Users/getUsersData';
 
-export const changeUserTurn = async (roomCode: string) => {
+export const changeUserTurn = async (socket: Socket, roomCode: string) => {
   await new Promise<void>((resolve, reject) => {
     db.get(
       'SELECT turn FROM rooms WHERE id = ?',
@@ -14,8 +17,18 @@ export const changeUserTurn = async (roomCode: string) => {
           reject(err);
         }
 
-        getUsersLength(roomCode).then((usersLength) => {
+        getUsersLength(roomCode).then(async (usersLength) => {
           changeTurn(usersLength, row.turn + 1);
+
+          const room = await getRoomData(roomCode);
+          const users = await getUsersData(roomCode);
+
+          const user = users.find(
+            (user) => user.position_in_room === room.turn
+          );
+
+          socket.nsp.to(roomCode).emit('update_turn', user);
+
           resolve();
         });
       }
