@@ -11,6 +11,7 @@ export const ClickTheBomb = () => {
   const users = useContext(usersDataContext);
   const [bomb, setBomb] = useState<ClickTheBombType | undefined>(undefined);
   const [userTurn, setUserTurn] = useState<userType | undefined>(undefined);
+  const [userAlive, setUserAlive] = useState<boolean>(true);
 
   const onceDone = useRef<boolean>(false);
 
@@ -34,31 +35,42 @@ export const ClickTheBomb = () => {
 
   useEffect(() => {
     socket.on('update_bomb', (data: ClickTheBombType) => {
-      console.log('Bomb updated', data);
       setBomb(() => data);
     });
 
     socket.on('update_turn', (data: userType) => {
-      console.log('Turn updated', data.nickname);
       setUserTurn(() => data);
+    });
+
+    socket.on('update_user_alive_status', () => {
+      setUserAlive(() => false);
     });
 
     return () => {
       socket.off('update_bomb');
       socket.off('update_turn');
+      socket.off('update_user_alive_status');
     };
   }, [socket]);
 
   return (
-    <div>
-      <h1>ClickTheBomb</h1>
-      <p>Turn: {userTurn?.nickname!}</p>
-      <button onClick={handleClick}>Click me</button>
-      <button onClick={handleSkip}>Skip</button>
-      <div>
-        <p>Counter: {bomb?.counter}</p>
-        <p>Max: {bomb?.max}</p>
-      </div>
-    </div>
+    <>
+      {userAlive ? (
+        <div>
+          <h1>ClickTheBomb</h1>
+          <p>Turn: {userTurn?.nickname!}</p>
+          <button onClick={handleClick}>Click me</button>
+          <button onClick={handleSkip}>Skip</button>
+          <div>
+            <p>Counter: {bomb?.counter}</p>
+            <p>Max: {bomb?.max}</p>
+          </div>
+        </div>
+      ) : (
+        <div>
+          <h1>You are dead</h1>
+        </div>
+      )}
+    </>
   );
 };
