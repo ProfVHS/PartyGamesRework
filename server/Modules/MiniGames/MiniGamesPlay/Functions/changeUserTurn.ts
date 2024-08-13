@@ -18,17 +18,7 @@ export const changeUserTurn = async (socket: Socket, roomCode: string) => {
         }
 
         getUsersLength(roomCode).then(async (usersLength) => {
-          changeTurn(usersLength, row.turn + 1);
-
-          const room = await getRoomData(roomCode);
-          const users = await getUsersData(roomCode);
-
-          const user = users.find(
-            (user) => user.position_in_room === room.turn
-          );
-
-          socket.nsp.to(roomCode).emit('update_turn', user);
-
+          changeTurn(socket, usersLength, row.turn + 1);
           resolve();
         });
       }
@@ -36,11 +26,15 @@ export const changeUserTurn = async (socket: Socket, roomCode: string) => {
   });
 };
 
-const changeTurn = async (usersLength: number, turn: number) => {
+const changeTurn = async (
+  socket: Socket,
+  usersLength: number,
+  turn: number
+) => {
   if (turn > usersLength) {
-    changeTurn(usersLength, 1);
+    changeTurn(socket, usersLength, 1);
   } else {
-    await new Promise<number>((resolve, reject) => {
+    return await new Promise<userType>((resolve, reject) => {
       db.get(
         'SELECT * FROM users WHERE position_in_room = ?',
         [turn],
@@ -51,7 +45,7 @@ const changeTurn = async (usersLength: number, turn: number) => {
             reject(err);
           }
           if (!user.alive || user.isDisconnected) {
-            changeTurn(usersLength, turn + 1);
+            changeTurn(socket, usersLength, turn + 1);
           }
 
           db.run(
@@ -64,7 +58,9 @@ const changeTurn = async (usersLength: number, turn: number) => {
                 reject(err);
               }
 
-              resolve(turn);
+              socket.nsp.to(user.room_id).emit('update_turn', user);
+
+              resolve(user);
             }
           );
         }

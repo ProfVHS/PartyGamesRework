@@ -10,7 +10,7 @@ export const ClickTheBomb = () => {
   const client = useContext(clientDataContext);
   const users = useContext(usersDataContext);
   const [bomb, setBomb] = useState<ClickTheBombType | undefined>(undefined);
-  const [turn, setTurn] = useState<userType | undefined>(undefined);
+  const [userTurn, setUserTurn] = useState<userType | undefined>(undefined);
 
   const onceDone = useRef<boolean>(false);
 
@@ -39,8 +39,8 @@ export const ClickTheBomb = () => {
     });
 
     socket.on('update_turn', (data: userType) => {
-      console.log('Turn updated', data);
-      setTurn(() => data);
+      console.log('Turn updated', data.nickname);
+      setUserTurn(() => data);
     });
 
     return () => {
@@ -52,7 +52,7 @@ export const ClickTheBomb = () => {
   return (
     <div>
       <h1>ClickTheBomb</h1>
-      <p>Turn: </p>
+      <p>Turn: {userTurn?.nickname!}</p>
       <button onClick={handleClick}>Click me</button>
       <button onClick={handleSkip}>Skip</button>
       <div>
