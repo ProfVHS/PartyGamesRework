@@ -6,5 +6,19 @@ export const randomUserTurn = async (roomCode: string) => {
 
   const randomUser = Math.floor(Math.random() * usersLenght) + 1;
 
-  db.run(`UPDATE rooms SET turn = ? WHERE id = ?`, [randomUser, roomCode]);
+  await new Promise<void>((resolve, reject) => {
+    db.run(
+      `UPDATE rooms SET turn = ? WHERE id = ?`,
+      [randomUser, roomCode],
+      (err: Error) => {
+        if (err) {
+          console.error('randomUserTurn.ts');
+          console.error(err.message);
+          reject(err);
+        }
+
+        resolve();
+      }
+    );
+  });
 };
