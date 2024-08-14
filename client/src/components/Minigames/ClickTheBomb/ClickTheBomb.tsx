@@ -11,7 +11,6 @@ export const ClickTheBomb = () => {
   const users = useContext(usersDataContext);
   const [bomb, setBomb] = useState<ClickTheBombType | undefined>(undefined);
   const [userTurn, setUserTurn] = useState<userType | undefined>(undefined);
-  const [userAlive, setUserAlive] = useState<boolean>(true);
 
   const onceDone = useRef<boolean>(false);
 
@@ -42,20 +41,15 @@ export const ClickTheBomb = () => {
       setUserTurn(() => data);
     });
 
-    socket.on('update_user_alive_status', () => {
-      setUserAlive(() => false);
-    });
-
     return () => {
       socket.off('update_bomb');
       socket.off('update_turn');
-      socket.off('update_user_alive_status');
     };
   }, [socket]);
 
   return (
     <>
-      {userAlive ? (
+      {client?.alive ? (
         <div>
           <h1>ClickTheBomb</h1>
           <p>Turn: {userTurn?.nickname!}</p>
