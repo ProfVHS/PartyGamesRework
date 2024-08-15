@@ -12,7 +12,7 @@ export const updateSelectedIdUser = async (
         if (err) {
           console.error('updateSelectedIdUser.ts: Update selected_id');
           console.error(err.message);
-          return return reject(err);
+          return reject(err);
         }
         resolve();
       }
