@@ -7,4 +7,5 @@ type userType = {
   position_in_room: number;
   alive: boolean;
   isDisconnected: boolean;
+  selected_id: number;
 };
