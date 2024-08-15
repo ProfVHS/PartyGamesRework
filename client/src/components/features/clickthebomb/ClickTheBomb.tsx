@@ -1,27 +1,64 @@
-import React, { SVGProps, useState } from 'react';
+import React, { SVGProps, useState, useContext } from 'react';
 import './ClickTheBombStyle.scss';
 import { Button } from '../../UI/Button/Button';
+import { clientDataContext } from '../../../useContext/clientDataContext';
 
-export const ClickTheBomb = () => {
-  const [counter, setCounter] = useState(0);
+type ClickTheBombProps = {
+  handleClick: () => void;
+  handleSkip: () => void;
+  userTurn: userType | undefined;
+  counter: number | undefined;
+};
+
+export const ClickTheBomb = ({
+  handleClick,
+  handleSkip,
+  userTurn,
+  counter,
+}: ClickTheBombProps) => {
+  const client = useContext(clientDataContext);
+  const [skipButtonDisplay, setSkipButtonDisplay] = useState<boolean>(false);
+
   return (
-    <div className="clickthebomb">
+    <div
+      className="clickthebomb"
+      style={{ pointerEvents: userTurn?.id === client?.id ? 'auto' : 'none' }}
+    >
       <div className="clickthebomb__info">
         <span className="clickthebomb__title">Click The Bomb</span>
-        <span className="clickthebomb__turn">Ultra Mango Guy Turn</span>
+        <span className="clickthebomb__turn">{userTurn?.nickname} Turn</span>
       </div>
       <div
         className="clickthebomb__bomb"
-        onClick={() => setCounter((prevCounter) => prevCounter + 1)}
+        onClick={() => {
+          handleClick();
+          setSkipButtonDisplay(true);
+        }}
       >
         <Bomb />
         <span className="clickthebomb__counter">
-          {counter >= 10 ? counter : '0' + counter}
+          {counter! >= 10 ? counter : '0' + counter}
         </span>
       </div>
-      <Button className="clickthebomb__button" type="button" size="medium">
-        Next
-      </Button>
+      {client!.alive ? (
+        skipButtonDisplay ? (
+          <Button
+            className="clickthebomb__button"
+            type="button"
+            size="medium"
+            onClick={() => {
+              handleSkip();
+              setSkipButtonDisplay(false);
+            }}
+          >
+            Next
+          </Button>
+        ) : (
+          <></>
+        )
+      ) : (
+        <div>You Lost</div>
+      )}
     </div>
   );
 };

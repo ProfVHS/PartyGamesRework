@@ -4,8 +4,9 @@ import { roomDataContext } from '../../../useContext/roomDataContext';
 import { clientDataContext } from '../../../useContext/clientDataContext';
 import { usersDataContext } from '../../../useContext/usersDataContext';
 import { ClickTheBombType } from '../../../Types/clickthebombType';
+import { ClickTheBomb } from '../../features/clickthebomb/ClickTheBomb';
 
-export const ClickTheBomb = () => {
+export const ClickTheBombGame = () => {
   const room = useContext(roomDataContext);
   const client = useContext(clientDataContext);
   const users = useContext(usersDataContext);
@@ -49,22 +50,12 @@ export const ClickTheBomb = () => {
 
   return (
     <>
-      {client?.alive ? (
-        <div>
-          <h1>ClickTheBomb</h1>
-          <p>Turn: {userTurn?.nickname!}</p>
-          <button onClick={handleClick}>Click me</button>
-          <button onClick={handleSkip}>Skip</button>
-          <div>
-            <p>Counter: {bomb?.counter}</p>
-            <p>Max: {bomb?.max}</p>
-          </div>
-        </div>
-      ) : (
-        <div>
-          <h1>You are dead</h1>
-        </div>
-      )}
+      <ClickTheBomb
+        handleClick={handleClick}
+        handleSkip={handleSkip}
+        userTurn={userTurn}
+        counter={bomb?.counter}
+      />
     </>
   );
 };
