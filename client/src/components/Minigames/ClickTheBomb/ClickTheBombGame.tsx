@@ -2,14 +2,12 @@ import { useContext, useEffect, useState, useRef } from 'react';
 import { socket } from '../../../socket';
 import { roomDataContext } from '../../../useContext/roomDataContext';
 import { clientDataContext } from '../../../useContext/clientDataContext';
-import { usersDataContext } from '../../../useContext/usersDataContext';
 import { ClickTheBombType } from '../../../Types/clickthebombType';
 import { ClickTheBomb } from '../../features/clickthebomb/ClickTheBomb';
 
 export const ClickTheBombGame = () => {
   const room = useContext(roomDataContext);
   const client = useContext(clientDataContext);
-  const users = useContext(usersDataContext);
   const [bomb, setBomb] = useState<ClickTheBombType | undefined>(undefined);
   const [userTurn, setUserTurn] = useState<userType | undefined>(undefined);
 

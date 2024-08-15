@@ -14,7 +14,7 @@ export const randomUserTurn = async (roomCode: string) => {
         if (err) {
           console.error('randomUserTurn.ts');
           console.error(err.message);
-          reject(err);
+          return reject(err);
         }
 
         resolve();

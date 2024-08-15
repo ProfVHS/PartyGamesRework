@@ -9,7 +9,7 @@ export const updateAliveUser = async (userId: string, alive: boolean) => {
         if (err) {
           console.error('updateAliveUser.ts');
           console.error(err.message);
-          reject(err);
+          return reject(err);
         }
         resolve();
       }
