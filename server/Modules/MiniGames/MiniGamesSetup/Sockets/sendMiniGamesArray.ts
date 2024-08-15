@@ -9,17 +9,16 @@ export const sendMiniGamesArray = (socket: Socket) => {
       miniGamesArray: string[],
       miniGamesArrayLength: number
     ) => {
-      console.log('Create array');
       // MiniGamesArray selected by the host
       if (miniGamesArray.length > 0) {
-        socket.nsp.to(roomCode).emit('update_miniGamesArray', miniGamesArray);
+        socket.nsp.to(roomCode).emit('receive_minigamesArray', miniGamesArray);
         return;
       }
 
       // Randomly generate miniGamesArray
       const miniGames = generateMiniGamesArray(miniGamesArrayLength);
 
-      socket.nsp.to(socket.id).emit('update_miniGamesArray', miniGames);
+      socket.nsp.to(socket.id).emit('receive_minigamesArray', miniGames);
     }
   );
 };

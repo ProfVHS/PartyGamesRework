@@ -7,6 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import { roomDataContext } from '../../useContext/roomDataContext';
 import { usersDataContext } from '../../useContext/usersDataContext';
 import { clientDataContext } from '../../useContext/clientDataContext';
+import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
+import { Minigame } from '../../components/Minigame/Minigame';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
@@ -14,6 +16,7 @@ export const RoomPage = () => {
   const [users, setUsers] = useState<userType[]>([]);
   const [client, setClient] = useState<userType>();
   const [minigames, setMinigames] = useState<Minigame[]>([]);
+  const [startMinigames, setStartMinigames] = useState<boolean>(false);
 
   const onceDone = useRef(false);
 
@@ -39,7 +42,7 @@ export const RoomPage = () => {
       setRoom(() => data);
     });
 
-    socket.on('update_miniGamesArray', (data: Minigame[]) => {
+    socket.on('receive_minigamesArray', (data: Minigame[]) => {
       console.log('Minigames updated', data);
       setMinigames(() => data);
     });
@@ -56,7 +59,7 @@ export const RoomPage = () => {
     return () => {
       socket.off('update_users');
       socket.off('update_room');
-      socket.off('update_miniGamesArray');
+      socket.off('receive_minigamesArray');
       socket.off('back_to_lobby');
       socket.off('disconnect');
     };
@@ -64,12 +67,14 @@ export const RoomPage = () => {
 
   useEffect(() => {
     if (room?.players_ready === users.length && users.length > 1) {
+      setStartMinigames(() => true);
+
       if (!client?.isHost) return;
+
+      socket.emit('update_users_position_in_room', room!.id);
 
       if (minigames.length == 0)
         socket.emit('create_miniGamesArray', room.id, [], 2);
-
-      console.log('All players ready');
     }
   }, [room?.players_ready]);
 
@@ -88,9 +93,16 @@ export const RoomPage = () => {
         <roomDataContext.Provider value={room}>
           <usersDataContext.Provider value={users}>
             <clientDataContext.Provider value={client}>
-              <div className="room__content">
-                <Lobby />
-              </div>
+              <minigamesArrayContext.Provider value={minigames}>
+                <div className="room__content">
+                  {startMinigames &&
+                  (minigames.length > 1 || !client!.isHost) ? (
+                    <Minigame />
+                  ) : (
+                    <Lobby />
+                  )}
+                </div>
+              </minigamesArrayContext.Provider>
             </clientDataContext.Provider>
           </usersDataContext.Provider>
         </roomDataContext.Provider>
