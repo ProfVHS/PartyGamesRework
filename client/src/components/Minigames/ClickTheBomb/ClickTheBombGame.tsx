@@ -2,7 +2,6 @@ import { useContext, useEffect, useState, useRef } from 'react';
 import { socket } from '../../../socket';
 import { roomDataContext } from '../../../useContext/roomDataContext';
 import { clientDataContext } from '../../../useContext/clientDataContext';
-import { ClickTheBombType } from '../../../Types/clickthebombType';
 import { ClickTheBomb } from '../../features/clickthebomb/ClickTheBomb';
 
 export const ClickTheBombGame = () => {
