@@ -15,8 +15,6 @@ export const generateCardsArray = async (round: number) => {
       Math.random() * cardsScoreArray[roundGame].length
     );
 
-    console.log(randomIndex);
-
     const card = {
       id: i,
       score: cardsScoreArray[roundGame][randomIndex],
