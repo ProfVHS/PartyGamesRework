@@ -3,76 +3,38 @@ import { socket } from '../../../socket';
 import { clientDataContext } from '../../../useContext/clientDataContext';
 import { roomDataContext } from '../../../useContext/roomDataContext';
 import { Card } from '../../features/cards/Card';
-import { set } from 'react-hook-form';
+import { usersDataContext } from '../../../useContext/usersDataContext';
 
 export const CardsGame = () => {
   const client = useContext(clientDataContext);
+  const users = useContext(usersDataContext);
   const room = useContext(roomDataContext);
 
   const [cardsArray, setCardsArray] = useState<CardsType[]>([]);
-  const [stopwatch, setStopwatch] = useState<number>(3);
+  const [stopwatch, setStopwatch] = useState<number>(10);
 
   const onceDone = useRef<boolean>(false);
+  const onceDoneInterval = useRef<boolean>(false);
 
-  const StopWatch = () => {
-    const stopwatchInterval = setInterval(() => {
-      setStopwatch((prev) => {
-        if (prev === 1) {
-          if (client!.isHost) {
-            socket.emit('check_are_users_ready', room!.id);
-          }
-          clearInterval(stopwatchInterval);
-        }
-        return prev - 1;
-      });
-    }, 1000);
+  const gameStatus = useRef<boolean>(false);
+
+  const handleSelectCard = (id: number) => {
+    socket.emit('update_selected_card', socket.id, id);
   };
 
-  const CardsInterval = (users: userType[]) => {
-    let cardId = 0;
-
-    const cardsInterval = setInterval(() => {
-      if (cardId == 8) {
-        clearInterval(cardsInterval);
-      }
-
-      setCardsArray((prevCardsArray) => {
-        const updatedCardsArray = prevCardsArray.map((card, index) => {
-          if (index === cardId) {
-            // Find users who selected this card
-            const usersSelectedCardId = users.filter(
-              (user) => user.selected_id === cardId
-            );
-
-            if (usersSelectedCardId.length > 0) {
-              if (client!.isHost) {
-                socket.emit(
-                  'update_user_score_cards',
-                  usersSelectedCardId,
-                  card
-                );
-              }
-              // Give points to users who selected this card
-            }
-
-            return {
-              ...card,
-              selectedByUsers: usersSelectedCardId,
-            };
+  const StopWatch = async () => {
+    await new Promise<void>((resolve) => {
+      const stopwatchInterval = setInterval(() => {
+        setStopwatch((prevStopwatch) => {
+          if (prevStopwatch === 1) {
+            clearInterval(stopwatchInterval);
+            resolve();
           }
 
-          return card;
+          return prevStopwatch - 1;
         });
-
-        return updatedCardsArray;
-      });
-
-      if (cardId == 8) {
-        clearInterval(cardsInterval);
-      }
-
-      cardId++;
-    }, 500);
+      }, 1000);
+    });
   };
 
   useEffect(() => {
@@ -86,28 +48,94 @@ export const CardsGame = () => {
   }, []);
 
   useEffect(() => {
-    socket.on('update_cards', (data: CardsType[]) => {
-      setCardsArray(() => data);
-      StopWatch();
-    });
+    if (cardsArray.length == 0) {
+      socket.emit('get_cards', room!.id);
+    }
+  }, []);
 
-    socket.on('all_users_ready_cards', (data: userType[]) => {
-      CardsInterval(data);
+  useEffect(() => {
+    socket.on('update_cards', (data: CardsType[]) => {
+      console.log('Update cards', data);
+      if (data.length < 9) {
+        setTimeout(() => {
+          socket.emit('get_cards', room!.id);
+        }, 500);
+      } else {
+        if (onceDoneInterval.current) return;
+        onceDoneInterval.current = true;
+
+        setCardsArray(() => data);
+
+        StopWatch().then(() => {
+          socket.emit('check_are_users_ready', room!.id, users?.length);
+        });
+      }
     });
 
     return () => {
       socket.off('update_cards');
-      socket.off('all_users_ready_cards');
     };
   }, [socket]);
+
+  useEffect(() => {
+    const usersReady = users?.filter((user) => user.ready);
+
+    if (usersReady?.length === users?.length) {
+      if (gameStatus.current) return;
+
+      gameStatus.current = true;
+
+      let cardId = 0;
+
+      const cardsInterval = setInterval(() => {
+        const usersSelectedCardId = users?.filter(
+          (user) => user.selected_id === cardId
+        );
+
+        if (usersSelectedCardId!.length > 0) {
+          if (client?.isHost) {
+            socket.emit(
+              'update_user_score_cards',
+              usersSelectedCardId,
+              cardsArray[cardId]
+            );
+          }
+          setCardsArray((prevCardsarry) => {
+            prevCardsarry[cardId - 1].selectedByUsers = usersSelectedCardId;
+
+            const newCardsArray = prevCardsarry;
+
+            return newCardsArray;
+          });
+        }
+
+        cardId++;
+
+        if (cardId === cardsArray.length) {
+          clearInterval(cardsInterval);
+          setStopwatch(10);
+
+          onceDoneInterval.current = false;
+          gameStatus.current = false;
+
+          if (!client!.isHost) return;
+
+          socket.emit('start_game_cards', room!.id);
+        }
+      }, 400);
+    }
+  }, [users]);
 
   return (
     <>
       <div>CardsGame</div>
+      <div>Round: {room!.round}</div>
       <div>{stopwatch}</div>
       <div style={{ display: 'flex', flexWrap: 'wrap' }}>
         {cardsArray.map((card) => (
-          <Card key={card.id} {...card} />
+          <div key={card.id} onClick={() => handleSelectCard(card.id)}>
+            <Card {...card} />
+          </div>
         ))}
       </div>
     </>

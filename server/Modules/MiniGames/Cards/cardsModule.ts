@@ -1,10 +1,12 @@
 import { Socket } from 'socket.io';
 import { startGame } from './Sockets/startGame';
-import { checkAreUsersReady } from './Sockets/checkAreUsersready';
 import { updateUserScoreCards } from './Sockets/updateUserScoreCards';
+import { updateSelectedCard } from './Sockets/updateSelectedCard';
+import { getCards } from './Sockets/getCards';
 
 export const cardsModule = (socket: Socket) => {
   startGame(socket);
-  checkAreUsersReady(socket);
+  getCards(socket);
   updateUserScoreCards(socket);
+  updateSelectedCard(socket);
 };

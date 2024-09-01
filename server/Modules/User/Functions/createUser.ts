@@ -8,8 +8,8 @@ export const createUser = async (
 ) => {
   await new Promise<void>((resolve) => {
     db.run(
-      `INSERT INTO users (id, nickname, score, room_id, isHost, position_in_room, alive, isDisconnected, selected_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-      [id, nickname, 100, room_id, isHost, 1, true, false, 0],
+      `INSERT INTO users (id, nickname, score, room_id, isHost, position_in_room, alive, isDisconnected, selected_id, ready) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, nickname, 100, room_id, isHost, 1, true, false, 0, false],
       (err) => {
         if (err) {
           console.error('createUser.ts');

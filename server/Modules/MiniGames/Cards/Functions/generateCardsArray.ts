@@ -1,8 +1,7 @@
 import { CardsType } from '../../../../Types/cardsType';
+import { db } from '../../../../Database/database';
 
-export const generateCardsArray = async (round: number) => {
-  const roundGame = round - 1;
-
+export const generateCardsArray = async (roomCode: string, round: number) => {
   const cardsScoreArray: [number[], number[], number[]] = [
     [25, 25, 25, 40, 40, 70, -20, -20, -35],
     [40, 40, 60, 80, 80, -35, -50, -50, -70],
@@ -12,19 +11,34 @@ export const generateCardsArray = async (round: number) => {
 
   for (let i = 0; i < 9; i++) {
     const randomIndex = Math.floor(
-      Math.random() * cardsScoreArray[roundGame].length
+      Math.random() * cardsScoreArray[round].length
     );
 
     const card = {
       id: i,
-      score: cardsScoreArray[roundGame][randomIndex],
-      isPossitive: cardsScoreArray[roundGame][randomIndex] > 0,
+      score: cardsScoreArray[round][randomIndex],
+      isPossitive: cardsScoreArray[round][randomIndex] > 0,
       selectedByUsers: [],
     };
 
-    cardsScoreArray[roundGame].splice(randomIndex, 1);
+    cardsScoreArray[round].splice(randomIndex, 1);
 
     cardsArray.push(card);
+
+    await new Promise<void>((resolve, reject) => {
+      db.run(
+        `INSERT INTO cards (card_id, score, isPossitive, room_id) VALUES (?, ?, ?, ?)`,
+        [card.id, card.score, card.isPossitive, roomCode],
+        (err: Error) => {
+          if (err) {
+            console.log('generateCardsArray.ts: Insert into cards');
+            console.log(err.message);
+            reject(err);
+          }
+          resolve();
+        }
+      );
+    });
   }
 
   return cardsArray;

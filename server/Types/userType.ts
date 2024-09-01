@@ -8,4 +8,5 @@ export type userType = {
   alive: boolean;
   isDisconnected: boolean;
   selected_id: number;
+  ready: boolean;
 };
