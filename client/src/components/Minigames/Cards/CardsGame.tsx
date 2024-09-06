@@ -18,6 +18,12 @@ export const CardsGame = () => {
 
   const gameStatus = useRef<boolean>(false);
 
+  const startGame = () => {
+    if (!client!.isHost) return;
+
+    socket.emit('start_game_cards', room!.id);
+  };
+
   const handleSelectCard = (id: number) => {
     socket.emit('update_selected_card', socket.id, id);
   };
@@ -40,9 +46,7 @@ export const CardsGame = () => {
   useEffect(() => {
     if (onceDone.current) return;
 
-    if (!client!.isHost) return;
-
-    socket.emit('start_game_cards', room!.id);
+    startGame();
 
     onceDone.current = true;
   }, []);
@@ -118,9 +122,8 @@ export const CardsGame = () => {
           onceDoneInterval.current = false;
           gameStatus.current = false;
 
-          if (!client!.isHost) return;
-
-          socket.emit('start_game_cards', room!.id);
+          console.log('End of game');
+          startGame();
         }
       }, 400);
     }

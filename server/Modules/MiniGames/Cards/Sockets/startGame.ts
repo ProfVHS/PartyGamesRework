@@ -24,8 +24,8 @@ export const startGame = (socket: Socket) => {
       );
     });
 
-    if (room.round == 3) {
-      console.log('End of the game');
+    if (room.round > 2) {
+      console.log('End of the game', socket.id);
       return;
     }
 
@@ -58,12 +58,12 @@ export const startGame = (socket: Socket) => {
             }
           );
         });
+      }).then(async () => {
+        await generateCardsArray(room.id, room.round).then(async (cards) => {
+          sendRoomData(socket, roomCode);
+          socket.nsp.to(roomCode).emit('update_cards', cards);
+        });
       });
     }
-
-    await generateCardsArray(room.id, room.round).then(async (cards) => {
-      sendRoomData(socket, roomCode);
-      socket.nsp.to(roomCode).emit('update_cards', cards);
-    });
   });
 };
