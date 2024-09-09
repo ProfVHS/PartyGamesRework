@@ -15,7 +15,7 @@ export const startGame = (socket: Socket) => {
             if (err) {
               console.error('startGame.ts ClickTheBomb');
               console.error(err.message);
-              reject(err);
+              return reject(err);
             } else {
               socket.nsp.to(roomCode).emit('update_bomb', {
                 id: roomCode,

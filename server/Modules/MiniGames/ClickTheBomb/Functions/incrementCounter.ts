@@ -9,7 +9,7 @@ export const incrementCounter = async (roomCode: string) => {
         if (err) {
           console.error('incrementCounter.ts ClickTheBomb');
           console.error(err.message);
-          reject(err);
+          return reject(err);
         } else {
           resolve();
         }

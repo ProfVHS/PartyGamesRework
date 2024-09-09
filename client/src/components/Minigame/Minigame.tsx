@@ -5,6 +5,7 @@ import { clientDataContext } from '../../useContext/clientDataContext';
 import { roomDataContext } from '../../useContext/roomDataContext';
 import './Minigame.scss';
 import { ClickTheBombGame } from '../Minigames/ClickTheBomb/ClickTheBombGame';
+import { CardsGame } from '../Minigames/Cards/CardsGame';
 
 export const Minigame = () => {
   const client = useContext(clientDataContext);
@@ -46,8 +47,8 @@ export const Minigame = () => {
 
   return (
     <div>
-      {currentMinigame!.minigameID === 'CTB' && <ClickTheBombGame />}
-      {currentMinigame!.minigameID === 'CARDS' && <ClickTheBombGame />}
+      {currentMinigame!.minigameID === 'CTB' && <CardsGame />}
+      {currentMinigame!.minigameID === 'CARDS' && <CardsGame />}
     </div>
   );
 };

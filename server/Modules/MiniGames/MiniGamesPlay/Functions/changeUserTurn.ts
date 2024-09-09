@@ -14,7 +14,7 @@ export const changeUserTurn = async (socket: Socket, roomCode: string) => {
         if (err) {
           console.error('changeUserTurn.ts');
           console.error(err.message);
-          reject(err);
+          return reject(err);
         }
 
         getUsersLength(roomCode).then(async (usersLength) => {
@@ -42,7 +42,7 @@ const changeTurn = async (
           if (err) {
             console.error('changeUserTurn.ts SELECT User');
             console.error(err.message);
-            reject(err);
+            return reject(err);
           }
           if (!user.alive || user.isDisconnected) {
             changeTurn(socket, usersLength, turn + 1);
@@ -55,7 +55,7 @@ const changeTurn = async (
               if (err) {
                 console.error('changeUserTurn.ts UPDATE turn');
                 console.error(err.message);
-                reject(err);
+                return reject(err);
               }
 
               socket.nsp.to(user.room_id).emit('update_turn', user);

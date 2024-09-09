@@ -10,7 +10,7 @@ export const sendUserTurn = async (socket: Socket, roomCode: string) => {
         if (err) {
           console.error('sendUserTurn.ts');
           console.error(err.message);
-          reject(err);
+          return reject(err);
         }
 
         db.get(
@@ -20,7 +20,7 @@ export const sendUserTurn = async (socket: Socket, roomCode: string) => {
             if (err) {
               console.error('sendUserTurn.ts SELECT User');
               console.error(err.message);
-              reject(err);
+              return reject(err);
             }
 
             socket.nsp.to(roomCode).emit('update_turn', user);

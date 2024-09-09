@@ -10,7 +10,7 @@ export const getClickTheBombData = async (roomCode: string) => {
         if (err) {
           console.error('getClickTheBombData.ts');
           console.error(err.message);
-          reject(err);
+          return reject(err);
         } else {
           resolve(row);
         }

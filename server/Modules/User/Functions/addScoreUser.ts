@@ -9,7 +9,7 @@ export const addScoreUser = async (id: string, score: number) => {
         if (err) {
           console.error('addScoreUser.ts: Add Score');
           console.error(err.message);
-          reject();
+          return reject(err);
         } else {
           resolve();
         }
