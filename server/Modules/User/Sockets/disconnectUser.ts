@@ -3,7 +3,7 @@ import { userType } from '../../../Types/userType';
 
 import { getUserData } from '../../../Database/Users/getUserData';
 
-import { deleteRoom } from '../../Room/Functions/deleteRoom';
+import { deleteRoomAndUsers } from '../../Room/Functions/deleteRoomAndUsers';
 import { deleteUsers } from '../Functions/deleteUsers';
 import { deleteUser } from '../Functions/deleteUser';
 import { sendUsersData } from '../Functions/sendUsersData';
@@ -15,8 +15,7 @@ export const disconnectUser = async (socket: Socket) => {
     if (!user) return;
 
     if (user.isHost == true) {
-      deleteRoom(user.room_id);
-      deleteUsers(user.room_id);
+      deleteRoomAndUsers(user.room_id);
       console.log('Host wyszedł');
     } else {
       deleteUser(user.id);
