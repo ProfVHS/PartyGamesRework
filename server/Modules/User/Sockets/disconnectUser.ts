@@ -23,6 +23,7 @@ export const disconnectUser = async (socket: Socket) => {
     if (!room) return;
 
     if (user.isHost == true) {
+      socket.to(user.room_id).emit('host_left');
       deleteRoomAndUsers(user.room_id);
       console.log('Host wyszedł');
     } else {

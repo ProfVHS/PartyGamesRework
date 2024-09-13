@@ -16,7 +16,7 @@ export const RoomPage = () => {
   const [users, setUsers] = useState<userType[]>([]);
   const [client, setClient] = useState<userType>();
   const [minigames, setMinigames] = useState<Minigame[]>([]);
-  const [startMinigames, setStartMinigames] = useState<boolean>(false);
+  const [gameStatus, setGameStatus] = useState<string>('Lobby');
 
   const onceDone = useRef(false);
 
@@ -56,18 +56,23 @@ export const RoomPage = () => {
       console.log('Disconnected from server', date);
     });
 
+    socket.on('host_left', () => {
+      setGameStatus(() => 'HostLeft');
+    });
+
     return () => {
       socket.off('update_users');
       socket.off('update_room');
       socket.off('receive_minigamesArray');
       socket.off('back_to_lobby');
       socket.off('disconnect');
+      socket.off('host_left');
     };
   }, [socket]);
 
   useEffect(() => {
     if (room?.players_ready === users.length && users.length > 1) {
-      setStartMinigames(() => true);
+      setGameStatus(() => 'Minigames');
 
       if (!client?.isHost) return;
 
@@ -95,11 +100,16 @@ export const RoomPage = () => {
             <clientDataContext.Provider value={client}>
               <minigamesArrayContext.Provider value={minigames}>
                 <div className="room__content">
-                  {startMinigames &&
-                  (minigames.length > 1 || !client!.isHost) ? (
-                    <Minigame />
-                  ) : (
-                    <Lobby />
+                  {gameStatus === 'Lobby' && <Lobby />}
+                  {gameStatus === 'Minigames' &&
+                    (minigames.length > 1 || !client?.isHost) && <Minigame />}
+                  {gameStatus === 'HostLeft' && (
+                    <>
+                      <div>Host Left</div>
+                      <button onClick={() => navigator('/')}>
+                        Back to lobby
+                      </button>
+                    </>
                   )}
                 </div>
               </minigamesArrayContext.Provider>
