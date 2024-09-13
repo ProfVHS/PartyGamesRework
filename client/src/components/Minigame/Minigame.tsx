@@ -24,6 +24,7 @@ export const Minigame = () => {
     if (!client!.isHost) return;
 
     socket.emit('update_currentMinigame', room!.id, minigamesArray![0]);
+    socket.emit('update_in_game_status', room!.id, true);
 
     onceDone.current = true;
   }, []);

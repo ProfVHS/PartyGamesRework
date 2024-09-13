@@ -1,11 +1,15 @@
 import { Socket } from 'socket.io';
+
 import { userType } from '../../../Types/userType';
+import { roomType } from '../../../Types/roomType';
 
 import { getUserData } from '../../../Database/Users/getUserData';
+import { getRoomData } from '../../../Database/Room/getRoomData';
 
 import { deleteRoomAndUsers } from '../../Room/Functions/deleteRoomAndUsers';
-import { deleteUsers } from '../Functions/deleteUsers';
+import { updateAliveUser } from '../Functions/updateAliveUser';
 import { deleteUser } from '../Functions/deleteUser';
+import { updateDisconnectedUser } from '../Functions/updateDisconnectedUser';
 import { sendUsersData } from '../Functions/sendUsersData';
 
 export const disconnectUser = async (socket: Socket) => {
@@ -14,11 +18,20 @@ export const disconnectUser = async (socket: Socket) => {
 
     if (!user) return;
 
+    const room: roomType = await getRoomData(user.room_id);
+
+    if (!room) return;
+
     if (user.isHost == true) {
       deleteRoomAndUsers(user.room_id);
       console.log('Host wyszedł');
     } else {
-      deleteUser(user.id);
+      if (room.in_game) {
+        updateDisconnectedUser(user.id, true);
+        updateAliveUser(user.id, false);
+      } else {
+        deleteUser(user.id);
+      }
       sendUsersData(socket, user.room_id);
     }
     console.log('User Disconnected', user.nickname);
