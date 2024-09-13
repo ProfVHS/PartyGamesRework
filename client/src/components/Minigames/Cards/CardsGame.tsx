@@ -82,9 +82,13 @@ export const CardsGame = () => {
   }, [socket]);
 
   useEffect(() => {
-    const usersReady = users?.filter((user) => user.ready);
+    const usersReady = users?.filter(
+      (user) => user.ready && !user.isDisconnected
+    );
 
-    if (usersReady?.length === users?.length) {
+    const usersPlaying = users?.filter((user) => !user.isDisconnected);
+
+    if (usersReady?.length === usersPlaying?.length) {
       if (gameStatus.current) return;
 
       gameStatus.current = true;
