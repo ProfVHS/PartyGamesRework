@@ -1,8 +1,10 @@
 import { Socket } from 'socket.io';
-import { db } from '../../../Database/database';
-import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
-import { getUsersLength } from '../../../Database/Users/getUsersLength';
+
 import { createUser } from '../../User/Functions/createUser';
+import { getUsersLength } from '../../../Database/Users/getUsersLength';
+
+import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
+import { getRoomData } from '../../../Database/Room/getRoomData';
 
 export const joinRoom = async (socket: Socket) => {
   socket.on('join_room', async (roomCode, nickname) => {
@@ -19,6 +21,13 @@ export const joinRoom = async (socket: Socket) => {
 
     if (usersInRoom >= 8) {
       socket.nsp.to(socket.id).emit('cannot_join', 'Room is full');
+      return;
+    }
+
+    const roomInGame = await getRoomData(roomCode);
+
+    if (roomInGame.in_game) {
+      socket.nsp.to(socket.id).emit('cannot_join', 'Game in progress');
       return;
     }
 
