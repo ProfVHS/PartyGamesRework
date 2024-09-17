@@ -93,7 +93,13 @@ export const RoomPage = () => {
     <div className="room">
       <div className="room__grid">
         {users.map((user) => (
-          <Camera key={user.id} nickname={user.nickname} score={user.score} />
+          <Camera
+            key={user.id}
+            nickname={user.nickname}
+            score={user.score}
+            alive={user.alive}
+            isDisconnected={user.isDisconnected}
+          />
         ))}
         <roomDataContext.Provider value={room}>
           <usersDataContext.Provider value={users}>
