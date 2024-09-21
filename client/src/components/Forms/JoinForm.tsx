@@ -3,9 +3,8 @@ import './FormStyle.scss';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Button } from '../UI/Button/Button';
 import { RowLayout } from '../layouts/RowLayout';
-import { useNavigate } from 'react-router-dom';
 import { socket } from '../../socket';
-import { useEffect } from 'react';
+import { useJoinRoom } from '../../hooks/useJoinRoom';
 
 interface FormInputs {
   nickname: string;
@@ -17,27 +16,15 @@ type JoinFormProps = {
 };
 
 export const JoinForm = ({ onCancel }: JoinFormProps) => {
-  const navigator = useNavigate();
   const { register, handleSubmit } = useForm<FormInputs>();
 
   const onJoin: SubmitHandler<FormInputs> = (data) => {
-    socket.emit('join_room', data.room, data.nickname);
+    const storageUserId = localStorage.getItem('socket-id');
+
+    socket.emit('join_room', data.room, data.nickname, storageUserId);
   };
 
-  useEffect(() => {
-    socket.on('cannot_join', (reason: string) => {
-      alert(reason);
-    });
-
-    socket.on('can_join', () => {
-      navigator('/room');
-    });
-
-    return () => {
-      socket.off('cannot_join');
-      socket.off('can_join');
-    };
-  }, [socket]);
+  useJoinRoom(socket);
 
   return (
     <form className="form" onSubmit={handleSubmit(onJoin)} onReset={onCancel}>

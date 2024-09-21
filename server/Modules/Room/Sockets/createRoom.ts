@@ -2,35 +2,48 @@ import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
 import { createUser } from '../../User/Functions/createUser';
+import { getUserData } from '../../../Database/Users/getUserData';
 
 export const createRoom = async (socket: Socket) => {
-  socket.on('create_room', async (roomCode: string, nickname: string) => {
-    const roomExistence = (await checkRoomExistence(roomCode)).valueOf();
+  socket.on(
+    'create_room',
+    async (roomCode: string, nickname: string, prevUserId: string) => {
+      const roomExistence = (await checkRoomExistence(roomCode)).valueOf();
 
-    if (roomExistence) {
-      socket.nsp.to(socket.id).emit('cannot_join');
-      return;
-    }
+      if (roomExistence) {
+        socket.nsp.to(socket.id).emit('cannot_join', 'Room found');
+        return;
+      }
 
-    await new Promise<void>(async (resolve) => {
-      await createUser(socket.id, nickname, roomCode, true);
+      const user = await getUserData(prevUserId);
 
-      db.run(
-        `INSERT INTO rooms (id, round, players_ready, current_minigame, in_game, turn) VALUES (?, 0, 0, 0, false, 1)`,
-        [roomCode],
-        (err) => {
-          if (err) {
-            console.error('createRoom.ts: Room Insert');
-            console.error(err.message);
-          } else {
-            resolve();
+      if (user) {
+        socket.nsp
+          .to(socket.id)
+          .emit('cannot_join', 'You are already in other room');
+        return;
+      }
+
+      await new Promise<void>(async (resolve) => {
+        await createUser(socket.id, nickname, roomCode, true);
+
+        db.run(
+          `INSERT INTO rooms (id, round, players_ready, current_minigame, in_game, turn) VALUES (?, 0, 0, 0, false, 1)`,
+          [roomCode],
+          (err) => {
+            if (err) {
+              console.error('createRoom.ts: Room Insert');
+              console.error(err.message);
+            } else {
+              resolve();
+            }
           }
-        }
-      );
-    }).then(async () => {
-      socket.join(roomCode);
+        );
+      }).then(async () => {
+        socket.join(roomCode);
 
-      socket.nsp.to(socket.id).emit('can_join');
-    });
-  });
+        socket.nsp.to(socket.id).emit('can_join');
+      });
+    }
+  );
 };

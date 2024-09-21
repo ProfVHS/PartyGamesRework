@@ -21,6 +21,9 @@ export const Minigame = () => {
 
   useEffect(() => {
     if (onceDone.current) return;
+
+    localStorage.setItem('socket-id', socket.id!);
+
     if (!client!.isHost) return;
 
     socket.emit('update_currentMinigame', room!.id, minigamesArray![0]);
