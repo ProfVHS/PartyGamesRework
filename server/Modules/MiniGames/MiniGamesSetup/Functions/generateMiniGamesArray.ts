@@ -2,21 +2,19 @@ import { Minigame } from '../../../../Types/Minigame';
 
 export const generateMiniGamesArray = (miniGamesLength: number) => {
   const GamesList: Minigame[] = [
-    { minigameID: 'CTB', name: 'Click The Bomb' },
-    { minigameID: 'CARDS', name: 'Cards' },
+    { minigame_id: 'CTB', name: 'Click The Bomb' },
+    { minigame_id: 'CARDS', name: 'Cards' },
   ];
 
   const miniGamesArray: Minigame[] = [];
   var id = 0;
-
-  console.log('Generating miniGamesArray', miniGamesLength);
 
   while (miniGamesArray.length < miniGamesLength) {
     const randomIndex = Math.floor(Math.random() * GamesList.length);
 
     miniGamesArray.push({
       id: id,
-      minigameID: GamesList[randomIndex].minigameID,
+      minigame_id: GamesList[randomIndex].minigame_id,
       name: GamesList[randomIndex].name,
     });
 

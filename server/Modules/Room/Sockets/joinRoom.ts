@@ -8,6 +8,7 @@ import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
 import { getRoomData } from '../../../Database/Room/getRoomData';
 
 import { db } from '../../../Database/database';
+import { updateDisconnectedUser } from '../../User/Functions/updateDisconnectedUser';
 
 export const joinRoom = async (socket: Socket) => {
   socket.on(
@@ -19,6 +20,24 @@ export const joinRoom = async (socket: Socket) => {
         // connect to the same room
         if (user.room_id === roomCode) {
           socket.join(roomCode);
+
+          await updateDisconnectedUser(user.id, false);
+
+          await new Promise<void>((resolve, reject) => {
+            db.run(
+              `UPDATE users SET id = ? WHERE id = ?`,
+              [socket.id, prevUserId],
+              (err: Error) => {
+                if (err) {
+                  console.error('joinRoom.ts: Update Socket Id');
+                  console.error(err.message);
+                  return reject(err);
+                } else {
+                  resolve();
+                }
+              }
+            );
+          });
 
           socket.nsp.to(socket.id).emit('can_join');
           return;

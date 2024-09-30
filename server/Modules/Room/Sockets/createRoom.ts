@@ -1,5 +1,6 @@
 import { Socket } from 'socket.io';
 import { db } from '../../../Database/database';
+
 import { checkRoomExistence } from '../../../Database/Room/checkRoomExistence';
 import { createUser } from '../../User/Functions/createUser';
 import { getUserData } from '../../../Database/Users/getUserData';
@@ -25,18 +26,28 @@ export const createRoom = async (socket: Socket) => {
       }
 
       await new Promise<void>(async (resolve) => {
-        await createUser(socket.id, nickname, roomCode, true);
-
         db.run(
-          `INSERT INTO rooms (id, round, players_ready, current_minigame, in_game, turn) VALUES (?, 0, 0, 0, false, 1)`,
+          `INSERT INTO rooms (id, round, players_ready, in_game, turn) VALUES (?, 0, 0, false, 1)`,
           [roomCode],
           (err) => {
             if (err) {
               console.error('createRoom.ts: Room Insert');
               console.error(err.message);
-            } else {
-              resolve();
             }
+          }
+        );
+
+        await createUser(socket.id, nickname, roomCode, true);
+
+        db.run(
+          `INSERT INTO minigame (name, minigame_id, current_minigame, room_id) VALUES ('', '', 0, ?)`,
+          [roomCode],
+          (err) => {
+            if (err) {
+              console.error('createRoom.ts: Minigame Insert');
+              console.error(err.message);
+            }
+            resolve();
           }
         );
       }).then(async () => {

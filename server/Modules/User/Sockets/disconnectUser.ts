@@ -22,7 +22,7 @@ export const disconnectUser = async (socket: Socket) => {
 
     if (!room) return;
 
-    if (user.isHost == true) {
+    if (user.isHost) {
       socket.to(user.room_id).emit('host_left');
       deleteRoomAndUsers(user.room_id);
       console.log('Host wyszedł');
@@ -30,6 +30,7 @@ export const disconnectUser = async (socket: Socket) => {
       if (room.in_game) {
         updateDisconnectedUser(user.id, true);
         updateAliveUser(user.id, false);
+        socket.nsp.to(user.room_id).emit('update_users_ready');
       } else {
         deleteUser(user.id);
       }

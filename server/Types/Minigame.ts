@@ -1,5 +1,5 @@
 export type Minigame = {
   id?: number;
-  minigameID: string;
+  minigame_id: string;
   name: string;
 };
