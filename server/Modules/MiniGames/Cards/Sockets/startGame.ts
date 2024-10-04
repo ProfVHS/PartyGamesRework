@@ -9,6 +9,7 @@ import { sendRoomData } from '../../../../Modules/Room/Functions/sendRoomData';
 import { updateReadyUsers } from '../../../User/Functions/updateReadyUsers';
 import { updateAliveUsers } from '../../../User/Functions/updateAliveUsers';
 import { sendUsersData } from '../../../User/Functions/sendUsersData';
+import { deleteCards } from '../Functions/deleteCards';
 
 export const startGame = (socket: Socket) => {
   socket.on('start_game_cards', async (roomCode: string) => {
@@ -33,7 +34,8 @@ export const startGame = (socket: Socket) => {
     updateAliveUsers(roomCode, true);
 
     if (room.round > 2) {
-      console.log('End of the game', socket.id);
+      deleteCards(roomCode);
+      socket.nsp.to(socket.id).emit('start_new_game');
       return;
     }
 

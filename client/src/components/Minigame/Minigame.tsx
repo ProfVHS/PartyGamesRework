@@ -40,17 +40,29 @@ export const Minigame = () => {
 
   useEffect(() => {
     socket.on('receive_currentMinigame', (data: Minigame) => {
+      console.log('Minigame - ', data.name);
       setCurrentMinigame(() => data);
+    });
+
+    socket.on('start_new_game', () => {
+      if (!minigamesArray) return;
+
+      const newIndex = currentMinigame.id;
+
+      const game = minigamesArray[newIndex! + 1];
+
+      socket.emit('update_currentMinigame', room!.id, game);
     });
 
     return () => {
       socket.off('receive_currentMinigame');
+      socket.off('start_new_game');
     };
   }, [socket]);
 
   return (
     <div>
-      {currentMinigame!.minigame_id === 'CTB' && <CardsGame />}
+      {currentMinigame!.minigame_id === 'CTB' && <ClickTheBombGame />}
       {currentMinigame!.minigame_id === 'CARDS' && <CardsGame />}
     </div>
   );
