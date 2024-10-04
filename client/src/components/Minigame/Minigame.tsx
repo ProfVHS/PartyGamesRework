@@ -6,6 +6,7 @@ import { roomDataContext } from '../../useContext/roomDataContext';
 import './Minigame.scss';
 import { ClickTheBombGame } from '../Minigames/ClickTheBomb/ClickTheBombGame';
 import { CardsGame } from '../Minigames/Cards/CardsGame';
+import Leaderboard from '../leaderboards/Leaderboard';
 
 export const Minigame = () => {
   const client = useContext(clientDataContext);
@@ -45,13 +46,7 @@ export const Minigame = () => {
     });
 
     socket.on('start_new_game', () => {
-      if (!minigamesArray) return;
-
-      const newIndex = currentMinigame.id;
-
-      const game = minigamesArray[newIndex! + 1];
-
-      socket.emit('update_currentMinigame', room!.id, game);
+      setCurrentMinigame({ ...currentMinigame, minigame_id: 'Leaderboard' });
     });
 
     return () => {
@@ -62,6 +57,7 @@ export const Minigame = () => {
 
   return (
     <div>
+      {currentMinigame!.minigame_id === 'Leaderboard' && <Leaderboard />}
       {currentMinigame!.minigame_id === 'CTB' && <ClickTheBombGame />}
       {currentMinigame!.minigame_id === 'CARDS' && <CardsGame />}
     </div>

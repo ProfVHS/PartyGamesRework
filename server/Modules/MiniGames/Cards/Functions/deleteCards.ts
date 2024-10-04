@@ -6,7 +6,7 @@ export const deleteCards = async (roomCode: string) => {
       if (err) {
         console.error('deleteCards.ts DELETE');
         console.error(err.message);
-        return;
+        reject();
       }
       resolve();
     });

@@ -8,6 +8,7 @@ import { changeUserTurn } from '../../MiniGamesPlay/Functions/changeUserTurn';
 import { createMaxClicks } from '../Functions/createMaxClicks';
 import { addScoreUser } from '../../../User/Functions/addScoreUser';
 import { sendUsersData } from '../../../User/Functions/sendUsersData';
+import { deleteClickTheBomb } from '../Functions/deleteClickTheBomb';
 
 export const updateCounter = async (socket: Socket) => {
   socket.on('update_counter_click_the_bomb', async (roomCode) => {
@@ -26,11 +27,9 @@ export const updateCounter = async (socket: Socket) => {
 
           await addScoreUser(winner.id, 50);
 
-          /*
-          
-          Game Over (Leaderboard, Next Game, etc)
+          deleteClickTheBomb(roomCode);
 
-          */
+          socket.nsp.to(roomCode).emit('start_new_game');
         } else {
           await changeUserTurn(socket, roomCode);
 

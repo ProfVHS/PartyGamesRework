@@ -2,7 +2,7 @@ import { db } from '../../Database/database';
 import { userType } from '../../Types/userType';
 
 export const getUserData = async (userId: string) => {
-  const user = await new Promise<userType>((resolve) => {
+  const user = await new Promise<userType>((resolve, reject) => {
     db.get(
       `SELECT * FROM users WHERE id = ?`,
       [userId],
@@ -10,6 +10,7 @@ export const getUserData = async (userId: string) => {
         if (err) {
           console.error('getUserData.ts: Select');
           console.error(err.message);
+          reject();
         } else {
           resolve(row);
         }
