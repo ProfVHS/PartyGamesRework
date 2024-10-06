@@ -46,7 +46,7 @@ export const MinigamesList = ({
       <div className="minigames-list__table">
         <span className="minigames-list__title">Minigames</span>
         <MinigameItem
-          minigame={{ minigameID: 'CTB', name: 'Click The Bomb' }}
+          minigame={{ minigame_id: 'CTB', name: 'Click The Bomb' }}
           type="add"
           onClick={addMinigame}
         />
@@ -108,7 +108,7 @@ const MinigameItem = ({ minigame, type, onClick }: MinigameItemProps) => {
       }`}
     >
       <div className="minigames-list__minigame-icon">
-        {minigame.minigameID === 'CTB' && <BombIcon height={25} />}
+        {minigame.minigame_id === 'CTB' && <BombIcon height={25} />}
       </div>
       <div className="minigames-list__minigame-content">
         <span>{minigame.name}</span>

@@ -52,7 +52,9 @@ export const CardsGame = () => {
   }, []);
 
   useEffect(() => {
-    if (cardsArray.length == 0) {
+    if (cardsArray.length > 0) return;
+
+    if (client?.alive) {
       socket.emit('get_cards', room!.id);
     }
   }, []);
@@ -63,9 +65,10 @@ export const CardsGame = () => {
       if (data.length < 9) {
         setTimeout(() => {
           socket.emit('get_cards', room!.id);
-        }, 500);
+        }, 400);
       } else {
         if (onceDoneInterval.current) return;
+
         onceDoneInterval.current = true;
 
         setCardsArray(() => data);
@@ -82,69 +85,76 @@ export const CardsGame = () => {
   }, [socket]);
 
   useEffect(() => {
-    const usersReady = users?.filter(
-      (user) => user.ready && !user.isDisconnected
-    );
+    if (gameStatus.current) return;
 
-    const usersPlaying = users?.filter((user) => !user.isDisconnected);
+    const usersReady = users?.filter((user) => user.ready);
+    const usersPlaying = users?.filter((user) => user.alive);
 
-    if (usersReady?.length === usersPlaying?.length) {
-      if (gameStatus.current) return;
+    if (usersReady?.length !== usersPlaying?.length) return;
+    if (cardsArray.length < 9) return;
 
-      gameStatus.current = true;
+    gameStatus.current = true;
 
-      let cardId = 0;
+    let cardId = 0;
 
-      const cardsInterval = setInterval(() => {
-        const usersSelectedCardId = users?.filter(
-          (user) => user.selected_id === cardId
-        );
+    const myInterval = setInterval(() => {
+      const usersSelectedCardId = users?.filter(
+        (user) => user.selected_id === cardId && user.alive
+      );
 
-        if (usersSelectedCardId!.length > 0) {
-          if (client?.isHost) {
-            socket.emit(
-              'update_user_score_cards',
-              usersSelectedCardId,
-              cardsArray[cardId]
-            );
-          }
-          setCardsArray((prevCardsarry) => {
-            prevCardsarry[cardId - 1].selectedByUsers = usersSelectedCardId;
-
-            const newCardsArray = prevCardsarry;
-
-            return newCardsArray;
-          });
+      if (usersSelectedCardId!.length > 0) {
+        if (client?.isHost) {
+          socket.emit(
+            'update_user_score_cards',
+            usersSelectedCardId,
+            cardsArray[cardId]
+          );
         }
+        setCardsArray((prevCardsarry) => {
+          prevCardsarry[cardId - 1].selectedByUsers = usersSelectedCardId;
 
-        cardId++;
+          const newCardsArray = prevCardsarry;
 
-        if (cardId === cardsArray.length) {
-          clearInterval(cardsInterval);
-          setStopwatch(10);
+          return newCardsArray;
+        });
+      }
 
-          onceDoneInterval.current = false;
-          gameStatus.current = false;
+      if (cardId == 8) {
+        clearInterval(myInterval);
 
-          console.log('End of game');
-          startGame();
-        }
-      }, 400);
-    }
+        onceDoneInterval.current = false;
+        gameStatus.current = false;
+
+        setStopwatch(10);
+        setCardsArray(() => []);
+
+        startGame();
+        return;
+      }
+
+      cardId++;
+    }, 500);
   }, [users]);
 
   return (
     <>
       <div>CardsGame</div>
-      <div>Round: {room!.round}</div>
-      <div>{stopwatch}</div>
-      <div style={{ display: 'flex', flexWrap: 'wrap' }}>
-        {cardsArray.map((card) => (
-          <div key={card.id} onClick={() => handleSelectCard(card.id)}>
-            <Card {...card} />
+      {!client?.alive ? (
+        <div>Wait for next round</div>
+      ) : (
+        <>
+          {' '}
+          <div>Round: {room!.round}</div>
+          <div>{stopwatch}</div>
+          <div style={{ display: 'flex', flexWrap: 'wrap' }}>
+            {cardsArray.map((card) => (
+              <div key={card.id} onClick={() => handleSelectCard(card.id)}>
+                <Card {...card} />
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </>
   );
 };

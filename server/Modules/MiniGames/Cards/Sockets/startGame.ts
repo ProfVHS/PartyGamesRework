@@ -1,8 +1,15 @@
 import { Socket } from 'socket.io';
 import { db } from '../../../../Database/database';
+
 import { generateCardsArray } from '../Functions/generateCardsArray';
+
 import { getRoomData } from '../../../../Database/Room/getRoomData';
 import { sendRoomData } from '../../../../Modules/Room/Functions/sendRoomData';
+
+import { updateReadyUsers } from '../../../User/Functions/updateReadyUsers';
+import { updateAliveUsers } from '../../../User/Functions/updateAliveUsers';
+import { sendUsersData } from '../../../User/Functions/sendUsersData';
+import { deleteCards } from '../Functions/deleteCards';
 
 export const startGame = (socket: Socket) => {
   socket.on('start_game_cards', async (roomCode: string) => {
@@ -24,8 +31,11 @@ export const startGame = (socket: Socket) => {
       );
     });
 
+    updateAliveUsers(roomCode, true);
+
     if (room.round > 2) {
-      console.log('End of the game', socket.id);
+      deleteCards(roomCode);
+      socket.nsp.to(roomCode).emit('start_new_game');
       return;
     }
 
@@ -57,9 +67,11 @@ export const startGame = (socket: Socket) => {
               resolve();
             }
           );
+          updateReadyUsers(roomCode, false);
         });
       }).then(async () => {
         await generateCardsArray(room.id, room.round).then(async (cards) => {
+          sendUsersData(socket, roomCode);
           sendRoomData(socket, roomCode);
           socket.nsp.to(roomCode).emit('update_cards', cards);
         });

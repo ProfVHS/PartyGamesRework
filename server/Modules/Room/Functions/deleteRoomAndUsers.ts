@@ -7,7 +7,13 @@ export const deleteRoomAndUsers = async (roomId: string) => {
         console.error('deleteRoomAndUsers.ts Room Delete');
         console.error(err.message);
       }
-      resolve();
+      db.run(`DELETE FROM users WHERE room_id = ?`, [roomId], (err) => {
+        if (err) {
+          console.error('deleteRoomAndUsers.ts User Delete');
+          console.error(err.message);
+        }
+        resolve();
+      });
     });
   });
 };
