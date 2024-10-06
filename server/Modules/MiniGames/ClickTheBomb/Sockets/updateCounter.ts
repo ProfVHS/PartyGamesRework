@@ -27,7 +27,7 @@ export const updateCounter = async (socket: Socket) => {
 
           await addScoreUser(winner.id, 50);
 
-          deleteClickTheBomb(roomCode);
+          await deleteClickTheBomb(roomCode);
 
           socket.nsp.to(roomCode).emit('start_new_game');
         } else {

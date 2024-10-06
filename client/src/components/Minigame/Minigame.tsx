@@ -47,6 +47,14 @@ export const Minigame = () => {
 
     socket.on('start_new_game', () => {
       setCurrentMinigame({ ...currentMinigame, minigame_id: 'Leaderboard' });
+      setTimeout(() => {
+        if (!client!.isHost) return;
+        const newIndex = currentMinigame.id;
+
+        const game = minigamesArray![newIndex! + 1];
+
+        socket.emit('update_currentMinigame', room!.id, game);
+      }, 4000);
     });
 
     return () => {

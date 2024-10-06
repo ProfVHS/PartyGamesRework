@@ -35,7 +35,7 @@ export const startGame = (socket: Socket) => {
 
     if (room.round > 2) {
       deleteCards(roomCode);
-      socket.nsp.to(socket.id).emit('start_new_game');
+      socket.nsp.to(roomCode).emit('start_new_game');
       return;
     }
 
