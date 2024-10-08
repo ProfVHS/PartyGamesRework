@@ -1,13 +1,17 @@
 import { useEffect, useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
+
+import './Room.scss';
+
+import { socket } from '../../socket';
+
+import { clientDataContext } from '../../useContext/clientDataContext';
+import { usersDataContext } from '../../useContext/usersDataContext';
+import { roomDataContext } from '../../useContext/roomDataContext';
+import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
+
 import { Camera } from '../../components/features/camera/Camera';
 import { Lobby } from '../../components/features/lobby/Lobby';
-import './Room.scss';
-import { socket } from '../../socket';
-import { useNavigate } from 'react-router-dom';
-import { roomDataContext } from '../../useContext/roomDataContext';
-import { usersDataContext } from '../../useContext/usersDataContext';
-import { clientDataContext } from '../../useContext/clientDataContext';
-import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
 import { Minigame } from '../../components/Minigame/Minigame';
 
 export const RoomPage = () => {

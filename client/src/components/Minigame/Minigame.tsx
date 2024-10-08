@@ -1,12 +1,17 @@
 import { useContext, useEffect, useRef, useState } from 'react';
+
+import './Minigame.scss';
+
 import { socket } from '../../socket';
+
 import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
 import { clientDataContext } from '../../useContext/clientDataContext';
 import { roomDataContext } from '../../useContext/roomDataContext';
-import './Minigame.scss';
+
+import Leaderboard from '../leaderboards/Leaderboard';
 import { ClickTheBombGame } from '../Minigames/ClickTheBomb/ClickTheBombGame';
 import { CardsGame } from '../Minigames/Cards/CardsGame';
-import Leaderboard from '../leaderboards/Leaderboard';
+import ColorsMemory from '../Minigames/ColorsMemory/ColorsMemory';
 
 export const Minigame = () => {
   const client = useContext(clientDataContext);
@@ -66,8 +71,9 @@ export const Minigame = () => {
   return (
     <div>
       {currentMinigame!.minigame_id === 'Leaderboard' && <Leaderboard />}
-      {currentMinigame!.minigame_id === 'CTB' && <ClickTheBombGame />}
-      {currentMinigame!.minigame_id === 'CARDS' && <CardsGame />}
+      {currentMinigame!.minigame_id === 'CTB' && <ColorsMemory />}
+      {currentMinigame!.minigame_id === 'CARDS' && <ColorsMemory />}
+      {currentMinigame!.minigame_id === 'COLORS' && <ColorsMemory />}
     </div>
   );
 };
