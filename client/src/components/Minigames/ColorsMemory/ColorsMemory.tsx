@@ -7,9 +7,14 @@ import { socket } from '../../../socket';
 import { clientDataContext } from '../../../useContext/clientDataContext';
 import { usersDataContext } from '../../../useContext/usersDataContext';
 
+import { Button } from '../../features/colorsmemory/Button';
+
 export default function ColorsMemory() {
   const client = useContext(clientDataContext);
   const users = useContext(usersDataContext);
+
+  const [lightButton, setLightButton] = useState<string>('');
+  const [gameStatus, setGameStatus] = useState<string>('animation');
 
   const buttonsArray = [
     'red',
@@ -26,7 +31,14 @@ export default function ColorsMemory() {
   const [currentButtonClick, setCurrentButtonClick] = useState<number>(0);
 
   const handleButtonClick = (color: string) => {
-    // stopwatch stop
+    if (lightButton !== '' || gameStatus == 'animation') return;
+
+    setLightButton(() => color);
+
+    setTimeout(() => {
+      setLightButton(() => '');
+    }, 500);
+
     if (color == buttonsSequence[currentButtonClick]) {
       if (currentButtonClick == buttonsSequence.length - 1) {
         addRandomButtonToSequence();
@@ -47,20 +59,44 @@ export default function ColorsMemory() {
     const newColor = buttonsArray[newIndex];
 
     setButtonsSequence((prev) => [...prev, newColor]);
-
-    // start animation
   };
 
   useEffect(() => {
     if (buttonsSequence.length === 0) {
-      addRandomButtonToSequence();
+      setTimeout(() => {
+        addRandomButtonToSequence();
+      }, 1000);
     }
   }, []);
 
   useEffect(() => {
+    setGameStatus(() => 'animation');
+
+    let index = 0;
+
+    const animationInterval = setInterval(() => {
+      if (index == buttonsSequence.length) {
+        clearInterval(animationInterval);
+        setGameStatus(() => 'game');
+        return;
+      }
+
+      const color = buttonsSequence[index];
+
+      setLightButton(() => color);
+
+      setTimeout(() => {
+        setLightButton(() => '');
+      }, 500);
+
+      index++;
+    }, 1000);
+  }, [buttonsSequence]);
+
+  useEffect(() => {
     const usersDead = users?.filter((user) => !user.alive);
 
-    if (usersDead?.length === users?.length) {
+    if (usersDead!.length + 1 === users?.length) {
       if (client?.isHost) {
         socket.emit('end_game_colors_memory', client?.room_id);
       }
@@ -69,20 +105,16 @@ export default function ColorsMemory() {
 
   return (
     <>
-      <div>Colors Memory</div>
       {client?.alive ? (
         <>
-          <div>Current - {currentButtonClick}</div>
-          <div className="buttons-box">
-            {buttonsArray.map((color) => (
-              <div
-                key={color}
-                className="button-color"
-                onClick={() => handleButtonClick(color)}
-                style={{ backgroundColor: color }}
-              >
-                {color}
-              </div>
+          <div className="colorsmemory">
+            {buttonsArray.map((button) => (
+              <Button
+                key={button}
+                color={button}
+                isLight={lightButton == button}
+                onClick={handleButtonClick}
+              />
             ))}
           </div>
         </>
