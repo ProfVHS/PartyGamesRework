@@ -8,11 +8,13 @@ import { clientDataContext } from '../../../useContext/clientDataContext';
 import { usersDataContext } from '../../../useContext/usersDataContext';
 
 import { Button } from '../../features/colorsmemory/Button';
+import { ProgressBar } from '../../features/progressbar';
 
 export default function ColorsMemory() {
   const client = useContext(clientDataContext);
   const users = useContext(usersDataContext);
 
+  const [time, setTime] = useState<number>(3000);
   const [lightButton, setLightButton] = useState<string>('');
   const [gameStatus, setGameStatus] = useState<string>('animation');
 
@@ -35,6 +37,8 @@ export default function ColorsMemory() {
 
     setLightButton(() => color);
 
+    setTime(() => 3000);
+
     setTimeout(() => {
       setLightButton(() => '');
     }, 500);
@@ -42,7 +46,6 @@ export default function ColorsMemory() {
     if (color == buttonsSequence[currentButtonClick]) {
       if (currentButtonClick == buttonsSequence.length - 1) {
         addRandomButtonToSequence();
-        // others staff to reset
         setCurrentButtonClick(() => 0);
         return;
       }
@@ -60,6 +63,25 @@ export default function ColorsMemory() {
 
     setButtonsSequence((prev) => [...prev, newColor]);
   };
+
+  useEffect(() => {
+    if (gameStatus == 'animation') return;
+
+    const timeInterval = setInterval(() => {
+      console.log(time);
+      if (time === 0) {
+        socket.emit('update_user_alive', client?.room_id, false);
+        clearInterval(timeInterval);
+        return;
+      }
+
+      setTime((prev) => prev - 100);
+    }, 100);
+
+    return () => {
+      clearInterval(timeInterval);
+    };
+  }, [gameStatus, time]);
 
   useEffect(() => {
     if (buttonsSequence.length === 0) {
@@ -117,6 +139,7 @@ export default function ColorsMemory() {
               />
             ))}
           </div>
+          <ProgressBar max={3000} progress={time} width={'150px'} />
         </>
       ) : (
         <>Wait for others ...</>

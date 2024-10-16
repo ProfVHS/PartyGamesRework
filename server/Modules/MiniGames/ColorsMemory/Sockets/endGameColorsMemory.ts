@@ -3,7 +3,7 @@ import { Socket } from 'socket.io';
 
 import { userType } from '../../../../Types/userType';
 
-import { updateScoreUser } from '../../../User/Functions/updateScoreUser';
+import { addScoreUser } from '../../../User/Functions/addScoreUser';
 import { updateAliveUsers } from '../../../User/Functions/updateAliveUsers';
 import { sendUsersData } from '../../../User/Functions/sendUsersData';
 
@@ -29,7 +29,7 @@ export const endGameColorsMemory = async (socket: Socket) => {
     });
 
     playersByPosition.forEach(async (player, index) => {
-      await updateScoreUser(player.id, scoreArray[index]);
+      await addScoreUser(player.id, scoreArray[index]);
     });
 
     await sendUsersData(socket, roomCode);
