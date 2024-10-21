@@ -16,7 +16,6 @@ export const updateUserAlive = async (socket: Socket) => {
             console.error(err.message);
           } else {
             const lastPostion = !rows.lastPosition ? 8 : rows.lastPosition - 1;
-            console.log(lastPostion);
             updateUserPositionInGame(socket.id, lastPostion);
             resolve();
           }

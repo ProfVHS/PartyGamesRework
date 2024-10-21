@@ -29,11 +29,15 @@ export const endGameColorsMemory = async (socket: Socket) => {
     });
 
     playersByPosition.forEach(async (player, index) => {
+      if (index >= scoreArray.length) return;
+
       await addScoreUser(player.id, scoreArray[index]);
+
+      if (playersByPosition.length - 1 === index) {
+        await sendUsersData(socket, roomCode);
+
+        socket.nsp.to(roomCode).emit('start_new_game');
+      }
     });
-
-    await sendUsersData(socket, roomCode);
-
-    socket.nsp.to(roomCode).emit('start_new_game');
   });
 };

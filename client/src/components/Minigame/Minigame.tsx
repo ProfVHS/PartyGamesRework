@@ -71,8 +71,8 @@ export const Minigame = () => {
   return (
     <div>
       {currentMinigame!.minigame_id === 'Leaderboard' && <Leaderboard />}
-      {currentMinigame!.minigame_id === 'CTB' && <ColorsMemory />}
-      {currentMinigame!.minigame_id === 'CARDS' && <ColorsMemory />}
+      {currentMinigame!.minigame_id === 'CTB' && <ClickTheBombGame />}
+      {currentMinigame!.minigame_id === 'CARDS' && <CardsGame />}
       {currentMinigame!.minigame_id === 'COLORS' && <ColorsMemory />}
     </div>
   );

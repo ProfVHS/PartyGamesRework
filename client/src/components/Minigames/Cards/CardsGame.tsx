@@ -61,7 +61,6 @@ export const CardsGame = () => {
 
   useEffect(() => {
     socket.on('update_cards', (data: CardsType[]) => {
-      console.log('Update cards', data);
       if (data.length < 9) {
         setTimeout(() => {
           socket.emit('get_cards', room!.id);
@@ -88,7 +87,11 @@ export const CardsGame = () => {
     if (gameStatus.current) return;
 
     const usersReady = users?.filter((user) => user.ready);
-    const usersPlaying = users?.filter((user) => user.alive);
+    const usersPlaying = users?.filter(
+      (user) => user.alive && !user.isDisconnected,
+    );
+
+    console.log(usersReady?.length, usersPlaying?.length);
 
     if (usersReady?.length !== usersPlaying?.length) return;
     if (cardsArray.length < 9) return;
@@ -99,7 +102,7 @@ export const CardsGame = () => {
 
     const myInterval = setInterval(() => {
       const usersSelectedCardId = users?.filter(
-        (user) => user.selected_id === cardId && user.alive
+        (user) => user.selected_id === cardId && user.alive,
       );
 
       if (usersSelectedCardId!.length > 0) {
@@ -107,7 +110,7 @@ export const CardsGame = () => {
           socket.emit(
             'update_user_score_cards',
             usersSelectedCardId,
-            cardsArray[cardId]
+            cardsArray[cardId],
           );
         }
         setCardsArray((prevCardsarry) => {
