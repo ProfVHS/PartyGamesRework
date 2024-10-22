@@ -4,6 +4,7 @@ export type userType = {
   score: number;
   room_id: string;
   isHost: boolean;
+  position_in_game: number;
   position_in_room: number;
   alive: boolean;
   isDisconnected: boolean;

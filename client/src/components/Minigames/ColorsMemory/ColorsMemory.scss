@@ -1,0 +1,50 @@
+.colorsmemory {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  width: 400px;
+
+  &__button {
+    width: 110px;
+    height: 110px;
+    margin-bottom: 20px;
+    border-radius: 5px;
+
+    @mixin colorMemoryItem($color) {
+      background-color: $color;
+      box-shadow: 0 7px 0 0 darken($color, 20%);
+    }
+
+    &.light {
+      opacity: 0.5;
+    }
+
+    &.red {
+      @include colorMemoryItem(#c81414);
+    }
+    &.orange {
+      @include colorMemoryItem(#ff9430);
+    }
+    &.yellow {
+      @include colorMemoryItem(#ffcf53);
+    }
+    &.darkblue {
+      @include colorMemoryItem(#1458b8);
+    }
+    &.blue {
+      @include colorMemoryItem(#389dfa);
+    }
+    &.green {
+      @include colorMemoryItem(#33c153);
+    }
+    &.purple {
+      @include colorMemoryItem(#ab55f0);
+    }
+    &.pink {
+      @include colorMemoryItem(#e334e6);
+    }
+    &.darkgreen {
+      @include colorMemoryItem(#1a7f30);
+    }
+  }
+}

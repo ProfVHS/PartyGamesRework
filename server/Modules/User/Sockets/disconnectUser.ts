@@ -7,10 +7,11 @@ import { getUserData } from '../../../Database/Users/getUserData';
 import { getRoomData } from '../../../Database/Room/getRoomData';
 
 import { deleteRoomAndUsers } from '../../Room/Functions/deleteRoomAndUsers';
-import { updateAliveUser } from '../Functions/updateAliveUser';
 import { deleteUser } from '../Functions/deleteUser';
-import { updateDisconnectedUser } from '../Functions/updateDisconnectedUser';
 import { sendUsersData } from '../Functions/sendUsersData';
+import { updateAliveUser } from '../Functions/updateAliveUser';
+import { updateDisconnectedUser } from '../Functions/updateDisconnectedUser';
+import { updateUserPositionInGame } from '../Functions/updateUserPositionInGame';
 
 export const disconnectUser = async (socket: Socket) => {
   socket.on('disconnect', async () => {
@@ -30,6 +31,7 @@ export const disconnectUser = async (socket: Socket) => {
       if (room.in_game) {
         updateDisconnectedUser(user.id, true);
         updateAliveUser(user.id, false);
+        updateUserPositionInGame(user.id, -1);
         socket.nsp.to(user.room_id).emit('update_users_ready');
       } else {
         deleteUser(user.id);
