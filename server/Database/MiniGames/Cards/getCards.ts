@@ -1,6 +1,6 @@
 import { Socket } from 'socket.io';
-import { db } from '../../../../Database/database';
-import { CardsType } from '../../../../Types/cardsType';
+import { db } from '../../database';
+import { CardsType } from '../../../Types/cardsType';
 
 export const getCards = (socket: Socket) => {
   socket.on('get_cards', async (roomCode: string) => {

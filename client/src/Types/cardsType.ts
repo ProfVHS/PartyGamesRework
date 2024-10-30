@@ -3,4 +3,5 @@ type CardsType = {
   score: number;
   isPossitive: boolean;
   selectedByUsers?: userType[];
+  flip: boolean;
 };
