@@ -63,19 +63,15 @@ export const CardsGame = () => {
   };
 
   useEffect(() => {
+    if (cardsArray.length > 0) return;
+
+    if (client?.alive) socket.emit('get_cards', room!.id);
+
     if (onceDone.current) return;
 
     startGame();
 
     onceDone.current = true;
-  }, []);
-
-  useEffect(() => {
-    if (cardsArray.length > 0) return;
-
-    if (client?.alive) {
-      socket.emit('get_cards', room!.id);
-    }
   }, []);
 
   useEffect(() => {
