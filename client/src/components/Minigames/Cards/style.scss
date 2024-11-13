@@ -1,0 +1,17 @@
+.cards__wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  width: 575px;
+  margin: 0 auto;
+  gap: 10px;
+
+  & > div:nth-child(-n + 5) {
+    flex-basis: calc(20% - 10px);
+  }
+
+  & > div:nth-child(n + 6) {
+    flex-basis: calc(20% - 10px);
+  }
+}
