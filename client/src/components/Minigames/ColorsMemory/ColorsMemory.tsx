@@ -10,7 +10,7 @@ import { usersDataContext } from '../../../useContext/usersDataContext';
 import { Button } from '../../features/colorsmemory/Button';
 import { ProgressBar } from '../../features/progressbar';
 
-export default function ColorsMemory() {
+export function ColorsMemory() {
   const client = useContext(clientDataContext);
   const users = useContext(usersDataContext);
 

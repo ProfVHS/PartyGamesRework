@@ -46,7 +46,7 @@ export const LobbySettings = ({
       'create_miniGamesArray',
       roomData!.id,
       newSettings.minigames,
-      newSettings.numberOfMinigames || 2
+      newSettings.numberOfMinigames || 2,
     );
     setShowAlert(null);
     setLobbySettings(newSettings);
@@ -79,7 +79,7 @@ export const LobbySettings = ({
           <NumberPicker
             defaultNumber={lobbySettings.numberOfMinigames || 2}
             min={2}
-            max={25}
+            max={3}
             onchange={(value) =>
               setNewSettings({ ...newSettings, numberOfMinigames: value })
             }

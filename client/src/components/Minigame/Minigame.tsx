@@ -11,7 +11,8 @@ import { roomDataContext } from '../../useContext/roomDataContext';
 import Leaderboard from '../leaderboards/Leaderboard';
 import { ClickTheBombGame } from '../Minigames/ClickTheBomb/ClickTheBombGame';
 import { CardsGame } from '../Minigames/Cards/CardsGame';
-import ColorsMemory from '../Minigames/ColorsMemory/ColorsMemory';
+import { ColorsMemory } from '../Minigames/ColorsMemory/ColorsMemory';
+import { EndGame } from '../features/endgame/EndGame';
 
 export const Minigame = () => {
   const client = useContext(clientDataContext);
@@ -71,6 +72,7 @@ export const Minigame = () => {
   return (
     <div>
       {currentMinigame!.minigame_id === 'Leaderboard' && <Leaderboard />}
+      {currentMinigame!.minigame_id === 'END' && <EndGame />}
       {currentMinigame!.minigame_id === 'CTB' && <ClickTheBombGame />}
       {currentMinigame!.minigame_id === 'CARDS' && <CardsGame />}
       {currentMinigame!.minigame_id === 'COLORS' && <ColorsMemory />}

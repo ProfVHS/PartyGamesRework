@@ -4,6 +4,7 @@ export const generateMiniGamesArray = (miniGamesLength: number) => {
   const GamesList: Minigame[] = [
     { minigame_id: 'CTB', name: 'Click The Bomb' },
     { minigame_id: 'CARDS', name: 'Cards' },
+    { minigame_id: 'COLORS', name: 'Colors Memory' },
   ];
 
   const miniGamesArray: Minigame[] = [];
@@ -21,6 +22,10 @@ export const generateMiniGamesArray = (miniGamesLength: number) => {
     GamesList.splice(randomIndex, 1);
     id++;
   }
+
+  miniGamesArray.push({ id: id, minigame_id: 'END', name: 'EndGame' });
+
+  console.log(miniGamesArray);
 
   return miniGamesArray;
 };
