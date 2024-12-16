@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { usersDataContext } from '../../useContext/usersDataContext';
+import { usersDataContext } from '../../../useContext/usersDataContext.ts';
 
 export default function Leaderboard() {
   const users = useContext(usersDataContext);

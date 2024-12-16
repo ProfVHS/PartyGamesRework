@@ -1,10 +1,10 @@
-import { JoinForm } from '../../components/Forms/JoinForm';
+import { JoinForm } from '../../components/features/forms/JoinForm';
 import './styles.scss';
 import logo from '../../assets/textures/logo.svg';
 import { RowLayout } from '../../components/layouts/RowLayout';
 import { Button } from '../../components/UI/Button/Button';
 import { useEffect, useState } from 'react';
-import { CreateForm } from '../../components/Forms/CreateForm';
+import { CreateForm } from '../../components/features/forms/CreateForm';
 import { useAnimate } from 'framer-motion';
 
 export const HomePage = () => {
@@ -28,7 +28,7 @@ export const HomePage = () => {
       { scale: [0.5, 1], opacity: [0, 1] },
       { duration: 0.5, type: 'spring' }
     );
-  }, [status]);
+  }, [animate, scope, status]);
 
   return (
     <div className="home">

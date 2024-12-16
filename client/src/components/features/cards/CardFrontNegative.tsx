@@ -1,4 +1,5 @@
 import MineSvg from './MineSvg';
+import { userType } from '../../../types/userType.ts';
 
 interface CardFrontNegativeProps {
   score: number;

@@ -4,6 +4,7 @@ import logo from '../../../assets/textures/logo.svg';
 import { CardFrontNegative } from './CardFrontNegative';
 import { CardFrontPositive } from './CardFrontPositive';
 import { useEffect, useState } from 'react';
+import { CardsType } from '../../../types/cardsType.ts';
 
 type CardType = CardsType & {
   flip: boolean;

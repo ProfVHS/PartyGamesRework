@@ -1,20 +1,21 @@
-import React, { SVGProps, useState, useContext } from 'react';
+import { SVGProps, useState, useContext } from 'react';
 import './ClickTheBombStyle.scss';
 import { Button } from '../../UI/Button/Button';
 import { clientDataContext } from '../../../useContext/clientDataContext';
+import { userType } from '../../../types/userType.ts';
 
 type ClickTheBombProps = {
   handleClick: () => void;
   handleSkip: () => void;
-  userTurn: userType | undefined;
-  counter: number | undefined;
+  userTurn?: userType;
+  counter: number;
 };
 
 export const ClickTheBomb = ({
   handleClick,
   handleSkip,
   userTurn,
-  counter,
+  counter = 0,
 }: ClickTheBombProps) => {
   const client = useContext(clientDataContext);
   const [skipButtonDisplay, setSkipButtonDisplay] = useState<boolean>(false);
@@ -40,22 +41,19 @@ export const ClickTheBomb = ({
           {counter! >= 10 ? counter : '0' + counter}
         </span>
       </div>
-      {client!.alive ? (
-        skipButtonDisplay ? (
-          <Button
-            className="clickthebomb__button"
-            type="button"
-            size="medium"
-            onClick={() => {
-              handleSkip();
-              setSkipButtonDisplay(false);
-            }}
-          >
-            Next
-          </Button>
-        ) : (
-          <></>
-        )
+      {client! ? (
+        <Button
+          className="clickthebomb__button"
+          type="button"
+          size="medium"
+          isDisabled={skipButtonDisplay}
+          onClick={() => {
+            handleSkip();
+            setSkipButtonDisplay(false);
+          }}
+        >
+          Next
+        </Button>
       ) : (
         <div>You Lost</div>
       )}

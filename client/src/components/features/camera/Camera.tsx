@@ -1,4 +1,5 @@
 import './CameraStyle.scss';
+import { Skeleton } from '../characters/Skeleton.tsx';
 
 type CameraProps = {
   nickname: string;
@@ -17,16 +18,10 @@ export const Camera = ({
     <div className="camera__wrapper">
       <div className="camera__box">
         <span className="camera__nickname">{nickname}</span>
-        <video className="camera__video"></video>
+        <div className="camera__video">
+          <Skeleton isDisconnected={isDisconnected} alive={alive} />
+        </div>
         <span className="camera__score">Score: {score}</span>
-
-        {isDisconnected ? (
-          <span>Disconnected</span>
-        ) : alive ? (
-          <span>Alive</span>
-        ) : (
-          <span>Dead</span>
-        )}
       </div>
     </div>
   );

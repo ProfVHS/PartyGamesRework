@@ -8,6 +8,7 @@ import { roomDataContext } from '../../../useContext/roomDataContext';
 import { usersDataContext } from '../../../useContext/usersDataContext';
 
 import { Card } from '../../features/cards/Card';
+import { CardsType } from '../../../types/cardsType.ts';
 
 export const CardsGame = () => {
   const client = useContext(clientDataContext);

@@ -1,10 +1,10 @@
 import './FormStyle.scss';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button } from '../UI/Button/Button';
-import { RowLayout } from '../layouts/RowLayout';
-import { socket } from '../../socket';
-import { useJoinRoom } from '../../hooks/useJoinRoom';
+import { Button } from '../../UI/Button/Button.tsx';
+import { RowLayout } from '../../layouts/RowLayout.tsx';
+import { socket } from '../../../socket.ts';
+import { useJoinRoom } from '../../../hooks/useJoinRoom.ts';
 
 interface FormInputs {
   nickname: string;

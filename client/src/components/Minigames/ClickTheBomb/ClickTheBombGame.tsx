@@ -3,6 +3,8 @@ import { socket } from '../../../socket';
 import { roomDataContext } from '../../../useContext/roomDataContext';
 import { clientDataContext } from '../../../useContext/clientDataContext';
 import { ClickTheBomb } from '../../features/clickthebomb/ClickTheBomb';
+import { ClickTheBombType } from '../../../types/clickthebombType.ts';
+import { userType } from '../../../types/userType.ts';
 
 export const ClickTheBombGame = () => {
   const room = useContext(roomDataContext);
@@ -28,7 +30,7 @@ export const ClickTheBombGame = () => {
     socket.emit('start_game_click_the_bomb', room!.id);
 
     onceDone.current = true;
-  }, []);
+  }, [client, room]);
 
   useEffect(() => {
     socket.on('update_bomb', (data: ClickTheBombType) => {
@@ -43,16 +45,14 @@ export const ClickTheBombGame = () => {
       socket.off('update_bomb');
       socket.off('update_turn');
     };
-  }, [socket]);
+  }, []);
 
   return (
-    <>
-      <ClickTheBomb
-        handleClick={handleClick}
-        handleSkip={handleSkip}
-        userTurn={userTurn}
-        counter={bomb?.counter}
-      />
-    </>
+    <ClickTheBomb
+      handleClick={handleClick}
+      handleSkip={handleSkip}
+      userTurn={userTurn}
+      counter={bomb?.counter || 0}
+    />
   );
 };

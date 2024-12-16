@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from './AlertIcons';
+import { ErrorIcon, InfoIcon, SuccessIcon, WarningIcon } from '../../common/Icons.tsx';
 import './AlertStyle.scss';
 import { useAnimate, motion } from 'framer-motion';
 
@@ -21,7 +21,7 @@ export const Alert = ({ type, message, duration = 5, onClose }: AlertType) => {
       { opacity: [0, 1], scale: [0, 1] },
       { type: 'spring', duration: 0.5 }
     );
-  }, []);
+  }, [animate, duration, scope]);
 
   useEffect(() => {
     if (timer < 0) {
@@ -42,7 +42,7 @@ export const Alert = ({ type, message, duration = 5, onClose }: AlertType) => {
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [timer]);
+  }, [animate, onClose, scope, timer]);
 
   return (
     <motion.div

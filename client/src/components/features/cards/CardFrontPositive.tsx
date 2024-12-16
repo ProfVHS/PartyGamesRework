@@ -1,3 +1,5 @@
+import { userType } from '../../../types/userType.ts';
+
 interface CardFrontPositiveProps {
   score: number;
   usersSelected: userType[];

@@ -31,13 +31,18 @@
     font-size: 1rem;
   }
   &__video {
+    display: flex;
+    justify-content: center;
+
     max-width: 175px;
     max-height: 125px;
     height: 100%;
     width: 100%;
 
     background-color: #000;
+    padding-top: 8px;
   }
+
   &__score {
     color: $secondaryColor;
     font-family: 'Poppins', sans-serif;

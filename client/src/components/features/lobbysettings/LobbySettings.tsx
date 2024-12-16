@@ -11,6 +11,9 @@ import { Alert } from '../../UI/Alert/Alert';
 import { socket } from '../../../socket';
 import { roomDataContext } from '../../../useContext/roomDataContext';
 import { useContext } from 'react';
+import { LobbySettingsType } from '../../../types/LobbySettings.ts';
+import { AlertType } from '../../../types/AlertType.ts';
+import { MinigameType } from '../../../types/Minigame.ts';
 
 type LobbySettingsProps = {
   onCancel: () => void;
@@ -125,7 +128,7 @@ export const LobbySettings = ({
           <Modal onClose={() => setMinigamesModal(false)}>
             <MinigamesList
               onCancel={() => setMinigamesModal(false)}
-              onSave={(minigames: Minigame[]) =>
+              onSave={(minigames: MinigameType[]) =>
                 setNewSettings({ ...newSettings, minigames })
               }
               minigames={newSettings.minigames || []}

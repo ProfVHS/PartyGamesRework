@@ -12,14 +12,18 @@ import { minigamesArrayContext } from '../../useContext/minigamesArrayContext';
 
 import { Camera } from '../../components/features/camera/Camera';
 import { Lobby } from '../../components/features/lobby/Lobby';
-import { Minigame } from '../../components/Minigame/Minigame';
+import { Minigame } from '../../components/features/minigame/Minigame';
+import { Error } from '../../components/UI/Error/Error.tsx';
+import { roomType } from '../../types/roomType.ts';
+import { userType } from '../../types/userType.ts';
+import { MinigameType } from '../../types/Minigame.ts';
 
 export const RoomPage = () => {
   const navigator = useNavigate();
   const [room, setRoom] = useState<roomType>();
   const [users, setUsers] = useState<userType[]>([]);
   const [client, setClient] = useState<userType>();
-  const [minigames, setMinigames] = useState<Minigame[]>([]);
+  const [minigames, setMinigames] = useState<MinigameType[]>([]);
   const [gameStatus, setGameStatus] = useState<string>('Lobby');
 
   const onceDone = useRef(false);
@@ -46,7 +50,7 @@ export const RoomPage = () => {
       setRoom(() => data);
     });
 
-    socket.on('receive_minigamesArray', (data: Minigame[]) => {
+    socket.on('receive_minigamesArray', (data: MinigameType[]) => {
       console.log('Minigames updated', data);
       setMinigames(() => data);
     });
@@ -72,7 +76,7 @@ export const RoomPage = () => {
       socket.off('disconnect');
       socket.off('host_left');
     };
-  }, [socket]);
+  }, [navigator]);
 
   useEffect(() => {
     if (room?.players_ready === users.length && users.length > 1) {
@@ -85,13 +89,13 @@ export const RoomPage = () => {
       if (minigames.length == 0)
         socket.emit('create_miniGamesArray', room.id, [], 2);
     }
-  }, [room?.players_ready]);
+  }, [client?.isHost, minigames.length, room, room?.players_ready, users.length]);
 
   useEffect(() => {
     if (users.length === 0 || room === null) {
       socket.emit('check_user_in_room');
     }
-  }, []);
+  }, [room, users.length]);
 
   return (
     <div className="room">
@@ -114,12 +118,7 @@ export const RoomPage = () => {
                   {gameStatus === 'Minigames' &&
                     (minigames.length > 1 || !client?.isHost) && <Minigame />}
                   {gameStatus === 'HostLeft' && (
-                    <>
-                      <div>Host Left</div>
-                      <button onClick={() => navigator('/')}>
-                        Back to lobby
-                      </button>
-                    </>
+                    <Error message="Host Left :(" />
                   )}
                 </div>
               </minigamesArrayContext.Provider>

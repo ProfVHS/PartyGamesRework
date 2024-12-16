@@ -2,8 +2,8 @@ import { Socket } from 'socket.io-client';
 
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { randomRoomCode } from '../utils/RandomRoomCode.ts';
 
-import { randomRoomCode } from '../components/Forms/CreateForm';
 
 export const useJoinRoom = (socket: Socket) => {
   const navigator = useNavigate();
@@ -27,5 +27,5 @@ export const useJoinRoom = (socket: Socket) => {
       socket.off('cannot_join');
       socket.off('can_join');
     };
-  }, [socket]);
+  }, [navigator, socket]);
 };

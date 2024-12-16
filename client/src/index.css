@@ -11,14 +11,15 @@ body {
 
   background-color: #f1eaf7;
   background-image: url('./assets/textures/background.svg');
-  animation: backgroundAnimation 40s linear infinite;
+  background-repeat: repeat;
+  animation: backgroundAnimation 15s linear infinite;
 }
 
 @keyframes backgroundAnimation {
   0% {
-    background-position: 0% 0%;
+    background-position: 0 0;
   }
   100% {
-    background-position: 100% 100%;
+    background-position: 500px 500px;
   }
 }

@@ -3,13 +3,12 @@ import './MinigamesListStyle.scss';
 import { Reorder } from 'framer-motion';
 import { Button } from '../../UI/Button/Button';
 import { BombIcon } from './SvgIcons';
-import { Minigame } from '../../../types/Minigame';
-import { Alert } from '../../UI/Alert/Alert';
+import { MinigameType } from '../../../types/Minigame.ts';
 
 type MinigamesListProps = {
   onCancel?: () => void;
-  onSave?: (Minigames: Minigame[]) => void;
-  minigames?: Minigame[];
+  onSave?: (Minigames: MinigameType[]) => void;
+  minigames?: MinigameType[];
 };
 
 export const MinigamesList = ({
@@ -17,19 +16,19 @@ export const MinigamesList = ({
   onSave,
   minigames,
 }: MinigamesListProps) => {
-  const [minigamesList, setMinigamesList] = useState<Minigame[]>(
+  const [minigamesList, setMinigamesList] = useState<MinigameType[]>(
     minigames! || []
   );
 
-  const addMinigame = (minigame: Minigame) => {
+  const addMinigame = (minigame: MinigameType) => {
     const id = minigamesList.length
       ? minigamesList[minigamesList.length - 1].id! + 1
       : 0;
-    const newMiniGame: Minigame = { id: id, ...minigame };
+    const newMiniGame: MinigameType = { id: id, ...minigame };
     setMinigamesList([...minigamesList, newMiniGame]);
   };
 
-  const removeMinigame = (minigame: Minigame) => {
+  const removeMinigame = (minigame: MinigameType) => {
     const newMinigamesList = minigamesList.filter(
       (item) => item.id !== minigame.id
     );
@@ -95,9 +94,9 @@ export const MinigamesList = ({
 };
 
 type MinigameItemProps = {
-  minigame: Minigame;
+  minigame: MinigameType;
   type: 'add' | 'remove';
-  onClick?: (minigame: Minigame) => void;
+  onClick?: (minigame: MinigameType) => void;
 };
 
 const MinigameItem = ({ minigame, type, onClick }: MinigameItemProps) => {

@@ -5,12 +5,12 @@ import { useState } from 'react';
 import { LobbySettings } from '../lobbysettings/LobbySettings';
 import { SettingsButton } from '../../UI/SettingsButton/SettingsButton';
 
-import { AnimatePresence, motion } from 'framer-motion';
-
 import { roomDataContext } from '../../../useContext/roomDataContext';
 import { clientDataContext } from '../../../useContext/clientDataContext';
 import { useContext } from 'react';
 import { socket } from '../../../socket';
+import { LobbySettingsType } from '../../../types/LobbySettings.ts';
+import { roomType } from '../../../types/roomType.ts';
 
 export const Lobby = () => {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -18,7 +18,7 @@ export const Lobby = () => {
   const [lobbySettings, setLobbySettings] = useState<LobbySettingsType>({
     isRandomMinigames: true,
     isTutorialsEnabled: true,
-    minigames: [],
+    minigames: []
   });
 
   const client = useContext(clientDataContext);
@@ -27,41 +27,23 @@ export const Lobby = () => {
   return (
     <>
       <div className="lobby">
-        <AnimatePresence mode="wait" initial={false}>
-          {isSettingsOpen ? (
-            <motion.div
-              key={'1'}
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.5, opacity: 0, transition: { duration: 0.2 } }}
-              transition={{ delay: 0.2, duration: 0.2 }}
-              style={{ height: '100%' }}
-            >
-              <LobbySettings
-                onCancel={() => setIsSettingsOpen(false)}
-                lobbySettings={lobbySettings}
-                setLobbySettings={setLobbySettings}
+        {isSettingsOpen ? (
+          <LobbySettings
+            onCancel={() => setIsSettingsOpen(false)}
+            lobbySettings={lobbySettings}
+            setLobbySettings={setLobbySettings}
+          />
+        ) : (
+          <div className="lobby__content">
+            <LobbyContent />
+            {client?.isHost == true && (
+              <SettingsButton
+                className="lobby__settingsbutton"
+                onClick={() => toggleLobbySettings()}
               />
-            </motion.div>
-          ) : (
-            <motion.div
-              className="lobby__content"
-              key={'2'}
-              initial={{ scale: 0.5, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.5, opacity: 0, transition: { duration: 0.2 } }}
-              transition={{ delay: 0.2, duration: 0.2 }}
-            >
-              <LobbyContent />
-              {client?.isHost == true && (
-                <SettingsButton
-                  className="lobby__settingsbutton"
-                  onClick={() => toggleLobbySettings()}
-                />
-              )}
-            </motion.div>
-          )}
-        </AnimatePresence>
+            )}
+          </div>
+        )}
       </div>
     </>
   );

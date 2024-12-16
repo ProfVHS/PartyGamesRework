@@ -1,10 +1,11 @@
 import './FormStyle.scss';
 
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { Button } from '../UI/Button/Button';
+import { Button } from '../../UI/Button/Button.tsx';
 import { useAnimate } from 'framer-motion';
-import { socket } from '../../socket';
-import { useJoinRoom } from '../../hooks/useJoinRoom';
+import { socket } from '../../../socket.ts';
+import { useJoinRoom } from '../../../hooks/useJoinRoom.ts';
+import { randomRoomCode } from '../../../utils/RandomRoomCode.ts';
 
 interface FormInputs {
   nickname: string;
@@ -15,20 +16,8 @@ type CreateFormProps = {
   onCancel: () => void;
 };
 
-export const randomRoomCode = () => {
-  const characters =
-    'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  let result = '';
-
-  while (result.length < 5) {
-    result += characters.charAt(Math.floor(Math.random() * characters.length));
-  }
-
-  return result;
-};
-
 export const CreateForm = ({ onCancel }: CreateFormProps) => {
-  const [scope, animate] = useAnimate();
+  const [scope] = useAnimate();
   const { register, handleSubmit } = useForm<FormInputs>();
   const roomCode = randomRoomCode();
 
